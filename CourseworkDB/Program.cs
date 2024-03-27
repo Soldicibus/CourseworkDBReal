@@ -1,5 +1,5 @@
 using CourseworkDB.Data.Models;
-//using CourseworkDB.Data.Repositories;
+using CourseworkDB.Data.Repositories;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Hosting;
@@ -13,8 +13,8 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddTransient<DataContext>();
-/*builder.Services.AddTransient<IUserRepository, UserRepository>();
-builder.Services.AddTransient<IRoleRepository, RoleRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+/*builder.Services.AddTransient<IRoleRepository, RoleRepository>();
 builder.Services.AddTransient<IUserRoleRepository, UserRoleRepository>();
 builder.Services.AddTransient<ICompanyRepository, CompanyRepository>();
 builder.Services.AddTransient<IAdTypesRepository, AdTypesRepository>();
