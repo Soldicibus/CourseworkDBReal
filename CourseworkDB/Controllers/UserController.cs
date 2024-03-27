@@ -2,6 +2,9 @@
 using Microsoft.AspNetCore.Mvc;
 using CourseworkDB.Data.Repositories;
 using Microsoft.Extensions.Logging;
+using AutoMapper;
+using CourseworkDB.Data.Dto;
+using System.Collections.Generic;
 
 namespace CourseworkDB.Api.Controllers;
 
@@ -12,13 +15,14 @@ public class UserController : Controller
     private readonly DataContext _ctx;
     private readonly IUserRepository _userrepos;
     private readonly ILogger<UserController> _logger;
+    private readonly IMapper _mapper;
 
-    public UserController(IUserRepository userrepos, DataContext ctx, ILogger<UserController> logger)
+    public UserController(IUserRepository userrepos, DataContext ctx, ILogger<UserController> logger, IMapper mapper)
     {
         _userrepos = userrepos;
         _ctx = ctx;
         _logger = logger;
-
+        _mapper = mapper;
     }
     [HttpGet]
     [ProducesResponseType(200, Type = typeof(IEnumerable<User>))]
@@ -28,7 +32,7 @@ public class UserController : Controller
     {
         try
         {
-            var users = await _userrepos.GetUsersAsync();
+            var users = _mapper.Map<List<UserDto>>(await _userrepos.GetUsersAsync());
 
             if (!ModelState.IsValid) return BadRequest(users);
             else return Ok(users);
@@ -52,8 +56,9 @@ public class UserController : Controller
         try
         {
             var user = await _userrepos.GetUserByIdAsync(UserId);
-            if (!ModelState.IsValid) return BadRequest(user);
-            if (user == null)
+            var userDto = _mapper.Map<UserDto>(user);
+            if (!ModelState.IsValid) return BadRequest(userDto);
+            if (userDto == null)
             {
                 return NotFound(new
                 {
@@ -61,7 +66,7 @@ public class UserController : Controller
                     message = "Record not found"
                 });
             }
-            else return Ok(user);
+            else return Ok(userDto);
         }
         catch (Exception ex)
         {
@@ -82,8 +87,9 @@ public class UserController : Controller
         try
         {
             var user = await _userrepos.GetUserByUsernameAsync(UserName);
-            if (!ModelState.IsValid) return BadRequest(user);
-            if (user == null)
+            var userDto = _mapper.Map<UserDto_wo_Id>(user);
+            if (!ModelState.IsValid) return BadRequest(userDto);
+            if (userDto == null)
             {
                 return NotFound(new
                 {
@@ -91,7 +97,7 @@ public class UserController : Controller
                     message = "Record not found"
                 });
             }
-            else return Ok(user);
+            else return Ok(userDto);
         }
         catch (Exception ex)
         {
@@ -113,6 +119,7 @@ public class UserController : Controller
         try
         {
             var user = await _userrepos.GetUserByEmailAsync(Email);
+            var userDto = _mapper.Map<UserDto_wo_Id>(user);
             if (!_userrepos.IsValidEmail(Email))
             {
                 return StatusCode(StatusCodes.Status406NotAcceptable, new
@@ -122,8 +129,8 @@ public class UserController : Controller
                 });
             }
 
-            if (!ModelState.IsValid) return BadRequest(user);
-            if (user == null)
+            if (!ModelState.IsValid) return BadRequest(userDto);
+            if (userDto == null)
             {
                 return NotFound(new
                 {
@@ -131,7 +138,7 @@ public class UserController : Controller
                     message = "Record not found"
                 });
             }
-            else return Ok(user);
+            else return Ok(userDto);
         }
         catch (Exception ex)
         {
