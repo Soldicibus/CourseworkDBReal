@@ -12,5 +12,8 @@ public class MappingProfiles : Profile
         CreateMap<User, UserDto_wo_Id>();
         CreateMap<Role, RoleDto>();
         CreateMap<Company, CompanyDto>();
+        CreateMap<Advertiser, AdvertiserDto>();
+        CreateMap<AdCampaign, AdCampaignDto>();
+        CreateMap<Publisher, PublisherDto>();
     }
 }

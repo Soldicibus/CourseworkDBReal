@@ -114,7 +114,7 @@ public class RoleController : Controller
         }
     }
     [HttpGet("{RoleId}/users")]
-    [ProducesResponseType(200, Type = typeof(IEnumerable<Role>))]
+    [ProducesResponseType(200, Type = typeof(IEnumerable<User>))]
     [ProducesResponseType(500)]
     [ProducesResponseType(404)]
     public async Task<IActionResult> GetUsersByRoleId(int RoleId)

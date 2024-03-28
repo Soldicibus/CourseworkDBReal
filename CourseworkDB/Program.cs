@@ -1,8 +1,5 @@
 using CourseworkDB.Data.Models;
 using CourseworkDB.Data.Repositories;
-using Microsoft.Extensions.Options;
-using Microsoft.Extensions.Logging;
-using Microsoft.AspNetCore.Hosting;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,13 +12,13 @@ builder.Services.AddTransient<IRoleRepository, RoleRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddTransient<IAdStatusRepository, AdStatusRepository>();
 builder.Services.AddTransient<IAdTypeRepository, AdTypeRepository>();
+builder.Services.AddTransient<IAdvertisersRepository, AdvertisersRepository>();
+builder.Services.AddTransient<IPublisherRepository, PublisherRepository>();
 builder.Services.AddTransient<ICompanyRepository, CompanyRepository>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddTransient<DataContext>();
 /*builder.Services.AddTransient<IUserRoleRepository, UserRoleRepository>();
-builder.Services.AddTransient<IAdvertisersRepository, AdvertisersRepository>();
-builder.Services.AddTransient<IPublishersRepository, PublishersRepository>();
 builder.Services.AddTransient<IAdCampaignsRepository, AdCampaignsRepository>();*/
 
 var app = builder.Build();
