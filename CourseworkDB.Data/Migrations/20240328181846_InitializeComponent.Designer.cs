@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CourseworkDB.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240328011034_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20240328181846_InitializeComponent")]
+    partial class InitializeComponent
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -65,6 +65,9 @@ namespace CourseworkDB.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    b.Property<int>("AdStatusStatusId")
+                        .HasColumnType("int");
+
                     b.Property<int?>("AdvertiserId")
                         .HasColumnType("int");
 
@@ -88,6 +91,8 @@ namespace CourseworkDB.Data.Migrations
                         .HasColumnType("float");
 
                     b.HasKey("CampaignId");
+
+                    b.HasIndex("AdStatusStatusId");
 
                     b.HasIndex("AdvertiserId");
 
@@ -311,6 +316,12 @@ namespace CourseworkDB.Data.Migrations
 
             modelBuilder.Entity("CourseworkDB.Data.Models.AdCampaign", b =>
                 {
+                    b.HasOne("CourseworkDB.Data.Models.AdStatus", "AdStatus")
+                        .WithMany()
+                        .HasForeignKey("AdStatusStatusId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("CourseworkDB.Data.Models.Advertiser", null)
                         .WithMany("AdCampaigns")
                         .HasForeignKey("AdvertiserId");
@@ -326,6 +337,8 @@ namespace CourseworkDB.Data.Migrations
                         .HasForeignKey("PublisherId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("AdStatus");
 
                     b.Navigation("Company");
 

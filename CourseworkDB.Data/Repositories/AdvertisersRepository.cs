@@ -22,4 +22,11 @@ public class AdvertisersRepository : IAdvertisersRepository
     {
         return await _ctx.Advertisers.Include(a => a.User).Include(a => a.AdCampaigns).FirstOrDefaultAsync(a => a.AdvertiserId == id);
     }
+    public async Task<IEnumerable<Advertiser>> GetAdvertisersByUserId(int userId)
+    {
+        return await _ctx.Advertisers
+        .Include(a => a.User)
+        .Include(a => a.AdCampaigns)
+        .Where(a => a.User.UserId == userId).ToListAsync();
+    }
 }

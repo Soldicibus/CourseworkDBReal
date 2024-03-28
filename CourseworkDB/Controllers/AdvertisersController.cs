@@ -82,7 +82,7 @@ public class AdvertisersController : Controller
             });
         }
     }
-    /*[HttpGet("{UserId}/advertisers")]
+    [HttpGet("{UserId}/advertisers")]
     [ProducesResponseType(200, Type = typeof(IEnumerable<Advertiser>))]
     [ProducesResponseType(500)]
     [ProducesResponseType(404)]
@@ -111,5 +111,5 @@ public class AdvertisersController : Controller
                 message = ex.Message
             });
         }
-    }*/
+    }
 }

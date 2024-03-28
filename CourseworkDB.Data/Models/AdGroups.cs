@@ -17,5 +17,4 @@ public class AdGroup
     public AdCampaign AdCampaign { get; set; }
     [Required]
     public float BidAmount { get; set; }
-    public ICollection<Ad> Ads { get; set; } = new List<Ad>();
 }

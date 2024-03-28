@@ -18,6 +18,9 @@ public class DataContext : DbContext
     public DbSet<Advertiser> Advertisers { get; set; }
     public DbSet<Publisher> Publishers { get; set; }
     public DbSet<AdType> AdTypes { get; set; }
+    public DbSet<Ad> Ads { get; set; }
+    public DbSet<AdGroup> AdGroups { get; set; }
+    public DbSet<Payment> Payments { get; set; }
     public DbSet<AdStatus> AdStatuses { get; set; }
     public DbSet<AdCampaign> AdCampaigns { get; set; }
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

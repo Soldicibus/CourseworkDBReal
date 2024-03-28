@@ -7,5 +7,6 @@ namespace CourseworkDB.Data.Repositories
         Task<IEnumerable<Publisher>> GetAllPublishersAsync();
         Task<Publisher> GetPublisherByIdAsync(int id);
         bool PublisherExist(int PublisherId);
+        Task<IEnumerable<Publisher>> GetPublishersByUserId(int userId);
     }
 }

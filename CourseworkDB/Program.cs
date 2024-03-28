@@ -8,18 +8,20 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddTransient<IRoleRepository, RoleRepository>();
+builder.Services.AddScoped<IRoleRepository, RoleRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddTransient<IAdStatusRepository, AdStatusRepository>();
-builder.Services.AddTransient<IAdTypeRepository, AdTypeRepository>();
-builder.Services.AddTransient<IAdvertisersRepository, AdvertisersRepository>();
-builder.Services.AddTransient<IPublisherRepository, PublisherRepository>();
-builder.Services.AddTransient<ICompanyRepository, CompanyRepository>();
+builder.Services.AddScoped<IAdStatusRepository, AdStatusRepository>();
+builder.Services.AddScoped<IAdTypeRepository, AdTypeRepository>();
+builder.Services.AddScoped<IAdvertisersRepository, AdvertisersRepository>();
+builder.Services.AddScoped<IPublisherRepository, PublisherRepository>();
+builder.Services.AddScoped<ICompanyRepository, CompanyRepository>();
+builder.Services.AddTransient<IAdCampaignsRepository, AdCampaignsRepository>();
+builder.Services.AddTransient<IAdGroupsRepository, AdGroupsRepository>();
+builder.Services.AddTransient<IAdRepository, AdRepository>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddTransient<DataContext>();
-/*builder.Services.AddTransient<IUserRoleRepository, UserRoleRepository>();
-builder.Services.AddTransient<IAdCampaignsRepository, AdCampaignsRepository>();*/
+/*builder.Services.AddTransient<IUserRoleRepository, UserRoleRepository>();*/
 
 var app = builder.Build();
 

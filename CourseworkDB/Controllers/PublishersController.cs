@@ -82,4 +82,34 @@ public class PublishersController : Controller
             });
         }
     }
+    [HttpGet("{UserId}/publishers")]
+    [ProducesResponseType(200, Type = typeof(IEnumerable<Publisher>))]
+    [ProducesResponseType(500)]
+    [ProducesResponseType(404)]
+    public async Task<IActionResult> GetPublishersByUserId(int UserId)
+    {
+        try
+        {
+            var publishers = _mapper.Map<List<PublisherDto>>(await _publisherrepos.GetPublishersByUserId(UserId));
+            if (!ModelState.IsValid) return BadRequest(publishers);
+            if (publishers == null)
+            {
+                return NotFound(new
+                {
+                    statusCode = 404,
+                    message = "Record not found"
+                });
+            }
+            else return Ok(publishers);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex.Message);
+            return StatusCode(StatusCodes.Status500InternalServerError, new
+            {
+                statusCode = 500,
+                message = ex.Message
+            });
+        }
+    }
 }

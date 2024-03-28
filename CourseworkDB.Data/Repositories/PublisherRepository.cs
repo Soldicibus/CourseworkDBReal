@@ -22,4 +22,10 @@ public class PublisherRepository : IPublisherRepository
     {
         return await _ctx.Publishers.Include(a => a.User).FirstOrDefaultAsync(a => a.PublisherId == id);
     }
+    public async Task<IEnumerable<Publisher>> GetPublishersByUserId(int userId)
+    {
+        return await _ctx.Publishers
+        .Include(a => a.User)
+        .Where(a => a.User.UserId == userId).ToListAsync();
+    }
 }

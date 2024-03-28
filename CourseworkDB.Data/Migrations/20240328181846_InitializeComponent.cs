@@ -7,7 +7,7 @@ using MySql.EntityFrameworkCore.Metadata;
 namespace CourseworkDB.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class InitializeComponent : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -181,11 +181,18 @@ namespace CourseworkDB.Data.Migrations
                     TotalBudget = table.Column<float>(type: "float", nullable: false),
                     PublisherId = table.Column<int>(type: "int", nullable: false),
                     CompanyId = table.Column<int>(type: "int", nullable: false),
+                    AdStatusStatusId = table.Column<int>(type: "int", nullable: false),
                     AdvertiserId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AdCampaigns", x => x.CampaignId);
+                    table.ForeignKey(
+                        name: "FK_AdCampaigns_AdStatuses_AdStatusStatusId",
+                        column: x => x.AdStatusStatusId,
+                        principalTable: "AdStatuses",
+                        principalColumn: "StatusId",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_AdCampaigns_Advertisers_AdvertiserId",
                         column: x => x.AdvertiserId,
@@ -267,6 +274,11 @@ namespace CourseworkDB.Data.Migrations
                 .Annotation("MySQL:Charset", "utf8mb4");
 
             migrationBuilder.CreateIndex(
+                name: "IX_AdCampaigns_AdStatusStatusId",
+                table: "AdCampaigns",
+                column: "AdStatusStatusId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_AdCampaigns_AdvertiserId",
                 table: "AdCampaigns",
                 column: "AdvertiserId");
@@ -334,9 +346,6 @@ namespace CourseworkDB.Data.Migrations
                 name: "Ads");
 
             migrationBuilder.DropTable(
-                name: "AdStatuses");
-
-            migrationBuilder.DropTable(
                 name: "UserRole");
 
             migrationBuilder.DropTable(
@@ -350,6 +359,9 @@ namespace CourseworkDB.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "AdCampaigns");
+
+            migrationBuilder.DropTable(
+                name: "AdStatuses");
 
             migrationBuilder.DropTable(
                 name: "Advertisers");
