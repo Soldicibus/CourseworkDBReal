@@ -1,10 +1,8 @@
 ﻿using CourseworkDB.Data.Models;
 using Microsoft.AspNetCore.Mvc;
 using CourseworkDB.Data.Repositories;
-using Microsoft.Extensions.Logging;
 using AutoMapper;
 using CourseworkDB.Data.Dto;
-using System.Collections.Generic;
 
 namespace CourseworkDB.Api.Controllers;
 
@@ -12,15 +10,13 @@ namespace CourseworkDB.Api.Controllers;
 [ApiController]
 public class UserController : Controller
 {
-    private readonly DataContext _ctx;
     private readonly IUserRepository _userrepos;
     private readonly ILogger<UserController> _logger;
     private readonly IMapper _mapper;
 
-    public UserController(IUserRepository userrepos, DataContext ctx, ILogger<UserController> logger, IMapper mapper)
+    public UserController(IUserRepository userrepos, ILogger<UserController> logger, IMapper mapper)
     {
         _userrepos = userrepos;
-        _ctx = ctx;
         _logger = logger;
         _mapper = mapper;
     }
@@ -55,6 +51,14 @@ public class UserController : Controller
     {
         try
         {
+            if (!_userrepos.UserExists(UserId))
+            {
+                return NotFound(new
+                {
+                    statusCode = 404,
+                    message = "Record doesn't exist"
+                });
+            }
             var user = await _userrepos.GetUserByIdAsync(UserId);
             var userDto = _mapper.Map<UserDto>(user);
             if (!ModelState.IsValid) return BadRequest(userDto);
@@ -158,9 +162,24 @@ public class UserController : Controller
     {
         try
         {
+            if (!_userrepos.UserExists(UserId))
+            {
+                return NotFound(new
+                {
+                    statusCode = 404,
+                    message = "Record doesn't exist (error UserId doesn't exitst)"
+                });
+            }
             var roles = _mapper.Map<List<RoleDto>>(await _userrepos.GetRolesOfAUserAsync(UserId));
-
             if (!ModelState.IsValid) return BadRequest(roles);
+            if (roles == null)
+            {
+                return NotFound(new
+                {
+                    statusCode = 404,
+                    message = "Record not found"
+                });
+            }
             else return Ok(roles);
         }
         catch (Exception ex)

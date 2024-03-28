@@ -13,13 +13,13 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddTransient<IRoleRepository, RoleRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddTransient<IAdStatusRepository, AdStatusRepository>();
 builder.Services.AddTransient<IAdTypeRepository, AdTypeRepository>();
 builder.Services.AddTransient<ICompanyRepository, CompanyRepository>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddTransient<DataContext>();
 /*builder.Services.AddTransient<IUserRoleRepository, UserRoleRepository>();
-builder.Services.AddTransient<IAdStatusRepository, AdStatusRepository>();
 builder.Services.AddTransient<IAdvertisersRepository, AdvertisersRepository>();
 builder.Services.AddTransient<IPublishersRepository, PublishersRepository>();
 builder.Services.AddTransient<IAdCampaignsRepository, AdCampaignsRepository>();*/

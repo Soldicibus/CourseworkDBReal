@@ -5,7 +5,7 @@ namespace CourseworkDB.Data.Repositories;
 
 public class AdTypeRepository : IAdTypeRepository
 {
-    public readonly DataContext _ctx;
+    private readonly DataContext _ctx;
     public AdTypeRepository(DataContext ctx)
     {
         _ctx = ctx;

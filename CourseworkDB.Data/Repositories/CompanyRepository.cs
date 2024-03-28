@@ -5,7 +5,7 @@ namespace CourseworkDB.Data.Repositories;
 
 public class CompanyRepository : ICompanyRepository
 {
-    public readonly DataContext _ctx;
+    private readonly DataContext _ctx;
     public CompanyRepository(DataContext ctx)
     {
         _ctx = ctx;

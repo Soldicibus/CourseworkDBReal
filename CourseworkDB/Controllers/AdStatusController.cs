@@ -6,28 +6,28 @@ namespace CourseworkDB.Api.Controllers;
 
 [Route("api/[controller]/[action]")]
 [ApiController]
-public class AdTypeController : Controller
+public class AdStatusController : Controller
 {
-    private readonly IAdTypeRepository _adTyperepos;
-    private readonly ILogger<AdTypeController> _logger;
+    private readonly IAdStatusRepository _adStatusrepos;
+    private readonly ILogger<AdStatusController> _logger;
 
-    public AdTypeController(IAdTypeRepository adTyperepos, ILogger<AdTypeController> logger)
+    public AdStatusController(IAdStatusRepository adStatusrepos, ILogger<AdStatusController> logger)
     {
-        _adTyperepos = adTyperepos;
+        _adStatusrepos = adStatusrepos;
         _logger = logger;
     }
     [HttpGet]
-    [ProducesResponseType(200, Type = typeof(IEnumerable<AdType>))]
+    [ProducesResponseType(200, Type = typeof(IEnumerable<AdStatus>))]
     [ProducesResponseType(500)]
     [ProducesResponseType(404)]
-    public async Task<IActionResult> GetAdTypes()
+    public async Task<IActionResult> GetAdStatuss()
     {
         try
         {
-            var adTypes = await _adTyperepos.GetAdTypesAsync();
+            var adStatuses = await _adStatusrepos.GetAdStatusesAsync();
 
-            if (!ModelState.IsValid) return BadRequest(adTypes);
-            else return Ok(adTypes);
+            if (!ModelState.IsValid) return BadRequest(adStatuses);
+            else return Ok(adStatuses);
         }
         catch (Exception ex)
         {
@@ -39,15 +39,15 @@ public class AdTypeController : Controller
             });
         }
     }
-    [HttpGet("{AdTypeId}")]
-    [ProducesResponseType(200, Type = typeof(IEnumerable<AdType>))]
+    [HttpGet("{AdStatusId}")]
+    [ProducesResponseType(200, Type = typeof(IEnumerable<AdStatus>))]
     [ProducesResponseType(500)]
     [ProducesResponseType(400)]
-    public async Task<IActionResult> GetAdTypeById(int AdTypeId)
+    public async Task<IActionResult> GetAdStatusById(int AdStatusId)
     {
         try
         {
-            if (!_adTyperepos.AdTypeExists(AdTypeId))
+            if (!_adStatusrepos.AdStatusExists(AdStatusId))
             {
                 return NotFound(new
                 {
@@ -55,10 +55,10 @@ public class AdTypeController : Controller
                     message = "Record doesn't exist"
                 });
             }
-            var adType = await _adTyperepos.GetAdTypeAsync(AdTypeId);
-            if (!ModelState.IsValid) return BadRequest(adType);
+            var adStatus = await _adStatusrepos.GetAdStatusAsync(AdStatusId);
+            if (!ModelState.IsValid) return BadRequest(adStatus);
             //DoubleCheck If exists
-            if (adType == null)
+            if (adStatus == null)
             {
                 return NotFound(new
                 {
@@ -66,7 +66,7 @@ public class AdTypeController : Controller
                     message = "Record not found"
                 });
             }
-            else return Ok(adType);
+            else return Ok(adStatus);
         }
         catch (Exception ex)
         {
@@ -78,17 +78,17 @@ public class AdTypeController : Controller
             });
         }
     }
-    [HttpGet("{AdTypeName}")]
-    [ProducesResponseType(200, Type = typeof(IEnumerable<AdType>))]
+    [HttpGet("{AdStatusName}")]
+    [ProducesResponseType(200, Type = typeof(IEnumerable<AdStatus>))]
     [ProducesResponseType(500)]
     [ProducesResponseType(404)]
-    public async Task<IActionResult> GetAdTypeByAdTypename(string AdTypeName)
+    public async Task<IActionResult> GetAdStatusByAdStatusname(string AdStatusName)
     {
         try
         {
-            var adType = await _adTyperepos.GetAdTypeByNameAsync(AdTypeName);
-            if (!ModelState.IsValid) return BadRequest(adType);
-            if (adType == null)
+            var adStatus = await _adStatusrepos.GetAdStatusByNameAsync(AdStatusName);
+            if (!ModelState.IsValid) return BadRequest(adStatus);
+            if (adStatus == null)
             {
                 return NotFound(new
                 {
@@ -96,7 +96,7 @@ public class AdTypeController : Controller
                     message = "Record not found"
                 });
             }
-            else return Ok(adType);
+            else return Ok(adStatus);
         }
         catch (Exception ex)
         {

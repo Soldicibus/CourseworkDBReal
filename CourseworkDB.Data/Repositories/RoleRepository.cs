@@ -5,7 +5,7 @@ namespace CourseworkDB.Data.Repositories;
 
 public class RoleRepository : IRoleRepository
 {
-    public readonly DataContext _ctx;
+    private readonly DataContext _ctx;
     public RoleRepository(DataContext ctx)
     {
         _ctx = ctx;

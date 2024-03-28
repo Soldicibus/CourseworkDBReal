@@ -3,7 +3,6 @@ using CourseworkDB.Data.Dto;
 using CourseworkDB.Data.Models;
 using CourseworkDB.Data.Repositories;
 using Microsoft.AspNetCore.Mvc;
-using System.ComponentModel;
 
 namespace CourseworkDB.Api.Controllers;
 
@@ -11,15 +10,13 @@ namespace CourseworkDB.Api.Controllers;
 [ApiController]
 public class CompanyController : Controller
 {
-    private readonly DataContext _ctx;
     private readonly ICompanyRepository _companyrepos;
     private readonly ILogger<CompanyController> _logger;
     private readonly IMapper _mapper;
 
-    public CompanyController(ICompanyRepository companyrepos, DataContext ctx, ILogger<CompanyController> logger, IMapper mapper)
+    public CompanyController(ICompanyRepository companyrepos, ILogger<CompanyController> logger, IMapper mapper)
     {
         _companyrepos = companyrepos;
-        _ctx = ctx;
         _logger = logger;
         _mapper = mapper;
     }
@@ -54,6 +51,14 @@ public class CompanyController : Controller
     {
         try
         {
+            if (!_companyrepos.CompanyExists(CompanyId))
+            {
+                return NotFound(new
+                {
+                    statusCode = 404,
+                    message = "Record doesn't exist"
+                });
+            }
             var compan = await _companyrepos.GetCompanyAsync(CompanyId);
             var company = _mapper.Map<CompanyDto>(compan);
             if (!ModelState.IsValid) return BadRequest(company);

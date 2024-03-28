@@ -10,15 +10,13 @@ namespace CourseworkDB.Api.Controllers;
 [ApiController]
 public class RoleController : Controller
 {
-    private readonly DataContext _ctx;
     private readonly IRoleRepository _rolerepos;
     private readonly ILogger<RoleController> _logger;
     private readonly IMapper _mapper;
 
-    public RoleController(IRoleRepository rolerepos, DataContext ctx, ILogger<RoleController> logger, IMapper mapper)
+    public RoleController(IRoleRepository rolerepos, ILogger<RoleController> logger, IMapper mapper)
     {
         _rolerepos = rolerepos;
-        _ctx = ctx;
         _logger = logger;
         _mapper = mapper;
     }
@@ -53,6 +51,14 @@ public class RoleController : Controller
     {
         try
         {
+            if (!_rolerepos.RoleExists(RoleId))
+            {
+                return NotFound(new
+                {
+                    statusCode = 404,
+                    message = "Record doesn't exist"
+                });
+            }
             var role = await _rolerepos.GetRoleAsync(RoleId);
             var roleDto = _mapper.Map<RoleDto>(role);
             if (!ModelState.IsValid) return BadRequest(roleDto);
@@ -115,6 +121,14 @@ public class RoleController : Controller
     {
         try
         {
+            if (!_rolerepos.RoleExists(RoleId))
+            {
+                return NotFound(new
+                {
+                    statusCode = 404,
+                    message = "Record doesn't exist (error RoleId doesn't exist)"
+                });
+            }
             var users = _mapper.Map<List<UserDto_wo_Id>>(await _rolerepos.GetUsersWithRoleAsync(RoleId));
             if (!ModelState.IsValid) return BadRequest(users);
             if (users == null)
