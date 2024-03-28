@@ -1,5 +1,6 @@
 ﻿using CourseworkDB.Data.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection.Metadata.Ecma335;
 
 namespace CourseworkDB.Data.Repositories;
 
@@ -10,15 +11,18 @@ public class UserRepository : IUserRepository
     {
         _ctx = ctx;
     }
+    public bool UserExists(int id)
+    {
+        return _ctx.Users.Any(u => u.UserId == id);
+    }
     public bool IsValidEmail(string email)
     {
         try
         {
-            var emailcheck = '@';
             var o = 0;
             for (var i = 0; i < email.Length; i++)
             {
-                if (email[i] == emailcheck) o++;
+                if (email[i] == '@') o++;
             }
             if (o != 1)
             {
@@ -46,6 +50,10 @@ public class UserRepository : IUserRepository
     public async Task<User> GetUserByEmailAsync(string email)
     {
         return await _ctx.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Email == email);
+    }
+    public async Task<ICollection<Role>> GetRolesOfAUserAsync(int id)
+    {
+        return await _ctx.UserRoles.Where(a => a.UserId == id).Select(a => a.Role).ToListAsync();
     }
     /*public async Task<User> CreateUserAsync(User user)
     {

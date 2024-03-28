@@ -27,7 +27,7 @@ public class UserController : Controller
     [HttpGet]
     [ProducesResponseType(200, Type = typeof(IEnumerable<User>))]
     [ProducesResponseType(500)]
-    [ProducesResponseType(400)]
+    [ProducesResponseType(404)]
     public async Task<IActionResult> GetUsers()
     {
         try
@@ -139,6 +139,29 @@ public class UserController : Controller
                 });
             }
             else return Ok(userDto);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex.Message);
+            return StatusCode(StatusCodes.Status500InternalServerError, new
+            {
+                statusCode = 500,
+                message = ex.Message
+            });
+        }
+    }
+    [HttpGet("{UserId}/roles")]
+    [ProducesResponseType(200, Type = typeof(IEnumerable<User>))]
+    [ProducesResponseType(500)]
+    [ProducesResponseType(404)]
+    public async Task<IActionResult> GetRolesByUserId(int UserId)
+    {
+        try
+        {
+            var roles = _mapper.Map<List<RoleDto>>(await _userrepos.GetRolesOfAUserAsync(UserId));
+
+            if (!ModelState.IsValid) return BadRequest(roles);
+            else return Ok(roles);
         }
         catch (Exception ex)
         {

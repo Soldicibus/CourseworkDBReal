@@ -10,6 +10,5 @@ public class Publisher
     [Required]
     public int PublisherId { get; set; }
     public User User { get; set; }
-    public ICollection<Company> Companies { get; set; }
     public string? WebsiteURL { get; set; }
 }
