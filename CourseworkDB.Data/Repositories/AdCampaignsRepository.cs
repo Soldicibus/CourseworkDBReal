@@ -70,12 +70,15 @@ public class AdCampaignsRepository : IAdCampaignsRepository
     {
         var adStatus = await _ctx.AdStatuses.FindAsync(adCampaign.AdStatus.StatusId);
         var company = await _ctx.Companies.FindAsync(adCampaign.Company.CompanyId);
-        if (company == null)
-        {
-            return null;
-        }
+        var adGroup = await _ctx.AdGroups.FindAsync(adCampaign.AdGroup.GroupId);
+        if (adStatus == null || company == null || adGroup == null)
+            if (company == null)
+            {
+                return null;
+            }
         adCampaign.Company = company;
         adCampaign.AdStatus = adStatus;
+        adCampaign.AdGroup = adGroup;
 
         _ctx.AdCampaigns.Add(adCampaign);
         await _ctx.SaveChangesAsync();
@@ -86,12 +89,15 @@ public class AdCampaignsRepository : IAdCampaignsRepository
     {
         var adStatus = await _ctx.AdStatuses.FindAsync(adCampaign.AdStatus.StatusId);
         var company = await _ctx.Companies.FindAsync(adCampaign.Company.CompanyId);
-        if (company == null)
-        {
-            return null;
-        }
+        var adGroup = await _ctx.AdGroups.FindAsync(adCampaign.AdGroup.GroupId);
+        if (adStatus == null || company == null || adGroup == null)
+            if (company == null)
+            {
+                return null;
+            }
         adCampaign.Company = company;
         adCampaign.AdStatus = adStatus;
+        adCampaign.AdGroup = adGroup;
 
         _ctx.AdCampaigns.Update(adCampaign);
         await _ctx.SaveChangesAsync();

@@ -275,15 +275,20 @@ public class AdCampaignsController : Controller
         try
         {
             var company = await _ctx.Companies.FindAsync(adCampaignCreationDto.CompanyId);
-            if (company == null)
+            var adStatus = await _ctx.AdStatuses.FindAsync(adCampaignCreationDto.AdStatusId);
+            var adGroup = await _ctx.AdGroups.FindAsync(adCampaignCreationDto.AdGroupId);
+            if (company == null || adStatus == null || adGroup == null)
             {
-                return NotFound("Publisher or Company not found");
+                return NotFound("Status, Company or Group not found");
             }
 
             var adCampaign = _mapper.Map<AdCampaign>(adCampaignCreationDto);
             adCampaign.Company = company;
+            adCampaign.AdStatus = adStatus;
+            adCampaign.AdGroup = adGroup;
             var createdAdCampaign = await _adCampaignrepos.CreateAdCampaignAsync(adCampaign);
-            return CreatedAtAction(nameof(AddAdCampaign), createdAdCampaign);
+            var output = _mapper.Map<AdCampaignDto>(createdAdCampaign);
+            return CreatedAtAction(nameof(AddAdCampaign), output);
         }
         catch (Exception ex)
         {
@@ -301,9 +306,11 @@ public class AdCampaignsController : Controller
         try
         {
             var company = await _ctx.Companies.FindAsync(adCampaignDto.CompanyId);
-            if (company == null)
+            var adStatus = await _ctx.AdStatuses.FindAsync(adCampaignDto.AdStatusId);
+            var adGroup = await _ctx.AdGroups.FindAsync(adCampaignDto.AdGroupId);
+            if (company == null || adStatus == null || adGroup == null)
             {
-                return NotFound("Publisher or Company not found");
+                return NotFound("Status, Company or Group not found");
             }
 
             var existAdCampaign = await _adCampaignrepos.GetAdCampaignAsync(adCampaignDto.CampaignId);
@@ -316,6 +323,8 @@ public class AdCampaignsController : Controller
                 });
             }
             existAdCampaign.Company = company;
+            existAdCampaign.AdStatus = adStatus;
+            existAdCampaign.AdGroup = adGroup;
             existAdCampaign.CampaignName = adCampaignDto.CampaignName;
             existAdCampaign.StartDate = adCampaignDto.StartDate;
             existAdCampaign.EndDate = adCampaignDto.EndDate;

@@ -1,4 +1,5 @@
 ﻿using CourseworkDB.Data.Models;
+using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection.Metadata.Ecma335;
 
@@ -57,12 +58,27 @@ public class UserRepository : IUserRepository
     }
     public async Task<User> CreateUserAsync(User user)
     {
+        user.Password = Convert.ToBase64String(KeyDerivation.Pbkdf2(
+            password: user.Password,
+            salt: new byte[128 / 8],
+            prf: KeyDerivationPrf.HMACSHA256,
+            iterationCount: 10000,
+            numBytesRequested: 256 / 8));
+
         _ctx.Users.Add(user);
         await _ctx.SaveChangesAsync();
         return user;
     }
+
     public async Task<User> UpdateUserAsync(User user)
     {
+        user.Password = Convert.ToBase64String(KeyDerivation.Pbkdf2(
+            password: user.Password,
+            salt: new byte[128 / 8],
+            prf: KeyDerivationPrf.HMACSHA256,
+            iterationCount: 10000,
+            numBytesRequested: 256 / 8));
+
         _ctx.Users.Update(user);
         await _ctx.SaveChangesAsync();
         return user;

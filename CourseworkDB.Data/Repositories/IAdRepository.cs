@@ -10,5 +10,8 @@ namespace CourseworkDB.Data.Repositories
         Task<Ad> GetAdsByIdAsync(int Id);
         Task<Ad> GetAdsByTitleAsync(string title);
         Task<Ad> GetAdsByTypeAsync(int Id);
+        Task DeleteAdAsync(int adId);
+        Task<Ad> UpdateAdAsync(Ad ad);
+        Task<Ad> CreateAdAsync(Ad ad);
     }
 }

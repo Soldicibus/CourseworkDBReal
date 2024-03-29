@@ -11,5 +11,6 @@ public class AdCampaignCreationDto
     public float TotalBudget { get; set; }
     public int PublisherId { get; set; }
     public int CompanyId { get; set; }
-    public AdStatus AdStatus { get; set; }
+    public int AdStatusId { get; set; }
+    public int AdGroupId { get; set; }
 }

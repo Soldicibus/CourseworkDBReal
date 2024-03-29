@@ -10,15 +10,15 @@ public class AdCampaign
     [Required]
     public int CampaignId { get; set; }
     [Required]
-    public string CampaignName { get; set;}
+    public string CampaignName { get; set; }
     [Required]
-    public DateTime StartDate { get; set;}
+    public DateTime StartDate { get; set; }
     [Required]
-    public DateTime EndDate { get; set;}
+    public DateTime EndDate { get; set; }
     [Required]
-    public float TotalBudget { get; set;}
+    public float TotalBudget { get; set; }
     public Company Company { get; set; }
     public AdStatus AdStatus { get; set; }
-    public AdGroup AdGroup { get; set; }
+    public AdGroup? AdGroup { get; set; }
     public ICollection<Ad>? Ads { get; set; } = new List<Ad>();
 }
