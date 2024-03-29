@@ -8,5 +8,8 @@ public interface IRoleRepository
     Task<Role> GetRoleByNameAsync(string rolename);
     Task<ICollection<Role>> GetRolesAsync();
     Task<ICollection<User>> GetUsersWithRoleAsync(int id);
+    Task<Role> CreateRoleAsync(Role role);
+    Task DeleteRoleAsync(int id);
+    Task<Role> UpdateRoleAsync(Role role);
     bool RoleExists(int id);
 }

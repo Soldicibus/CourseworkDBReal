@@ -11,5 +11,5 @@ public class Role
     public int RoleId { get; set; }
     [Required]
     public string RoleName { get; set; }
-    public ICollection<UserRole> UserRoles { get; set; } = new List<UserRole>();
+    public ICollection<UserRole>? UserRoles { get; set; } = new List<UserRole>();
 }

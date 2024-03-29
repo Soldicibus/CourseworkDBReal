@@ -237,4 +237,34 @@ public class AdCampaignsController : Controller
             });
         }
     }
+    [HttpGet]
+    [ProducesResponseType(200, Type = typeof(IEnumerable<AdCampaign>))]
+    [ProducesResponseType(500)]
+    [ProducesResponseType(400)]
+    public async Task<IActionResult> GetAdCampaignDecreasingBidAmount()
+    {
+        try
+        {
+            var adCampaign = _mapper.Map<List<AdCampaignDto>>(await _adCampaignrepos.GetAdCampaignsInDecreasingOrderAsync());
+            if (!ModelState.IsValid) return BadRequest(adCampaign);
+            if (adCampaign == null)
+            {
+                return NotFound(new
+                {
+                    statusCode = 404,
+                    message = "Record not found"
+                });
+            }
+            else return Ok(adCampaign);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex.Message);
+            return StatusCode(StatusCodes.Status500InternalServerError, new
+            {
+                statusCode = 500,
+                message = ex.Message
+            });
+        }
+    }
 }

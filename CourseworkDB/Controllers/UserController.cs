@@ -192,4 +192,91 @@ public class UserController : Controller
             });
         }
     }
+    [HttpPost]
+    public async Task<IActionResult> AddUser(UserDto_w_pass userDto)
+    {
+        try
+        {
+            var user = _mapper.Map<User>(userDto);
+            var createdUser = await _userrepos.CreateUserAsync(user);
+            return CreatedAtAction(nameof(AddUser), createdUser);
+
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex.Message);
+            return StatusCode(StatusCodes.Status500InternalServerError, new
+            {
+                statusCode = 500,
+                message = ex.Message
+            });
+        }
+    }
+    [HttpPut]
+    public async Task<IActionResult> UpdateUser(UserDto_w_pass userDto)
+    {
+        try
+        {
+            var userUpdated = _mapper.Map<User>(userDto);
+            var existUser = await _userrepos.GetUserByIdAsync(userUpdated.UserId);
+            if (existUser == null)
+            {
+                return NotFound(new
+                {
+                    statusCode = 404,
+                    message = "Record not found"
+                });
+            }
+            existUser.UserName = userUpdated.UserName;
+            existUser.Email = userUpdated.Email;
+            existUser.Password = userUpdated.Password;
+            await _userrepos.UpdateUserAsync(existUser);
+            return NoContent();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex.Message);
+            return StatusCode(StatusCodes.Status500InternalServerError, new
+            {
+                statusCode = 500,
+                message = ex.Message
+            });
+        }
+    }
+    [HttpDelete("{UserId}")]
+    public async Task<IActionResult> DeleteUser(int UserId)
+    {
+        try
+        {
+            if (!_userrepos.UserExists(UserId))
+            {
+                return NotFound(new
+                {
+                    statusCode = 404,
+                    message = "Record doesn't exist"
+                });
+            }
+            var existUser = await _userrepos.GetUserByIdAsync(UserId);
+            if (existUser == null)
+            {
+                return NotFound(new
+                {
+                    statusCode = 404,
+                    message = "Record not found"
+                });
+            }
+            await _userrepos.DeleteUserAsync(UserId);
+            return NoContent();
+
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex.Message);
+            return StatusCode(StatusCodes.Status500InternalServerError, new
+            {
+                statusCode = 500,
+                message = ex.Message
+            });
+        }
+    }
 }

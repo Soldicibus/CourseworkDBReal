@@ -55,8 +55,27 @@ public class UserRepository : IUserRepository
     {
         return await _ctx.UserRoles.Where(a => a.UserId == id).Select(a => a.Role).ToListAsync();
     }
-    /*public async Task<User> CreateUserAsync(User user)
+    public async Task<User> CreateUserAsync(User user)
     {
+        _ctx.Users.Add(user);
+        await _ctx.SaveChangesAsync();
+        return user;
+    }
+    public async Task<User> UpdateUserAsync(User user)
+    {
+        _ctx.Users.Update(user);
+        await _ctx.SaveChangesAsync();
+        return user;
+    }
+    public async Task DeleteUserAsync(int id)
+    {
+        var user = await _ctx.Users.FindAsync(id);
+        if (user == null)
+        {
+            return;
+        }
 
-    }*/
+        _ctx.Users.Remove(user);
+        await _ctx.SaveChangesAsync();
+    }
 }

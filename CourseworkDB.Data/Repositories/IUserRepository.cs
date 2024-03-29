@@ -10,5 +10,8 @@ public interface IUserRepository
     Task<User> GetUserByIdAsync(int id);
     Task<User> GetUserByUsernameAsync(string username);
     Task<ICollection<Role>> GetRolesOfAUserAsync(int id);
+    Task<User> CreateUserAsync(User user);
+    Task<User> UpdateUserAsync(User user);
+    Task DeleteUserAsync(int id);
     bool IsValidEmail(string email);
 }

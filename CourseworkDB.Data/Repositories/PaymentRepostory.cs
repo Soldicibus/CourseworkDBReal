@@ -5,10 +5,10 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace CourseworkDB.Data.Repositories;
 
-public class PaymentRepostory : IPaymentRepostory
+public class PaymentRepository : IPaymentRepository
 {
     private readonly DataContext _ctx;
-    public PaymentRepostory(DataContext ctx)
+    public PaymentRepository(DataContext ctx)
     {
         _ctx = ctx;
     }
@@ -36,5 +36,4 @@ public class PaymentRepostory : IPaymentRepostory
     {
         return await _ctx.Payments.OrderByDescending(p => p.PaymentAmount).ToListAsync();
     }
-
 }

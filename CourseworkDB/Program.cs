@@ -17,6 +17,7 @@ builder.Services.AddScoped<IPublisherRepository, PublisherRepository>();
 builder.Services.AddScoped<ICompanyRepository, CompanyRepository>();
 builder.Services.AddTransient<IAdCampaignsRepository, AdCampaignsRepository>();
 builder.Services.AddTransient<IAdGroupsRepository, AdGroupsRepository>();
+builder.Services.AddTransient<IPaymentRepository, PaymentRepository>();
 builder.Services.AddTransient<IAdRepository, AdRepository>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

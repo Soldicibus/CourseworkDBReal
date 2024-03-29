@@ -2,7 +2,7 @@
 
 namespace CourseworkDB.Data.Repositories
 {
-    public interface IPaymentRepostory
+    public interface IPaymentRepository
     {
         Task<Payment> GetPaymentByDateAsync(DateTime date);
         Task<Payment> GetPaymentByGroupAsync(int GroupId);

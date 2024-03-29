@@ -9,6 +9,7 @@ namespace CourseworkDB.Data.Repositories
         Task<AdGroup> GetAdGroupByAudienceAsync(string Audience);
         Task<AdGroup> GetAdGroupByCampaignAsync(int CampaignId);
         Task<AdGroup> GetAdGroupByNameAsync(string AdGroupName);
+        Task<ICollection<AdGroup>> GetAdGroupsInDecreasingOrderAsync();
         Task<ICollection<AdGroup>> GetAdGroupsAsync();
     }
 }

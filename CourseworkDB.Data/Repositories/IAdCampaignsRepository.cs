@@ -11,6 +11,7 @@ namespace CourseworkDB.Data.Repositories
         Task<AdCampaign> GetAdCampaignByNameAsync(string AdCampaign);
         Task<AdCampaign> GetAdCampaignByStartDateAsync(DateTime date);
         Task<AdCampaign> GetAdCampaignByStatusAsync(int StatusId);
+        Task<ICollection<AdCampaign>> GetAdCampaignsInDecreasingOrderAsync();
         Task<ICollection<AdCampaign>> GetAdCampaignsAsync();
     }
 }

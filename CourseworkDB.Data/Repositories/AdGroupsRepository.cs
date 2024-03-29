@@ -42,4 +42,8 @@ public class AdGroupsRepository : IAdGroupsRepository
             .Include(ac => ac.AdCampaign)
             .FirstOrDefaultAsync(r => r.Audience == Audience);
     }
+    public async Task<ICollection<AdGroup>> GetAdGroupsInDecreasingOrderAsync()
+    {
+        return await _ctx.AdGroups.OrderByDescending(p => p.BidAmount).ToListAsync();
+    }
 }

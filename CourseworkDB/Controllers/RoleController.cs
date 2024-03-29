@@ -151,4 +151,89 @@ public class RoleController : Controller
             });
         }
     }
+    [HttpPost]
+    public async Task<IActionResult> AddRole(RoleDto roleDto)
+    {
+        try
+        {
+            var role = _mapper.Map<Role>(roleDto);
+            var createdRole = await _rolerepos.CreateRoleAsync(role);
+            return CreatedAtAction(nameof(AddRole), createdRole);
+
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex.Message);
+            return StatusCode(StatusCodes.Status500InternalServerError, new
+            {
+                statusCode = 500,
+                message = ex.Message
+            });
+        }
+    }
+    [HttpPut]
+    public async Task<IActionResult> UpdateRole(RoleDto roleDto)
+    {
+        try
+        {
+            var roleUpdated = _mapper.Map<Role>(roleDto);
+            var existRole = await _rolerepos.GetRoleAsync(roleUpdated.RoleId);
+            if (existRole == null)
+            {
+                return NotFound(new
+                {
+                    statusCode = 404,
+                    message = "Record not found"
+                });
+            }
+            existRole.RoleName = roleUpdated.RoleName;
+            await _rolerepos.UpdateRoleAsync(existRole);
+            return NoContent();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex.Message);
+            return StatusCode(StatusCodes.Status500InternalServerError, new
+            {
+                statusCode = 500,
+                message = ex.Message
+            });
+        }
+    }
+    [HttpDelete("{RoleId}")]
+    public async Task<IActionResult> DeleteRole(int RoleId)
+    {
+        try
+        {
+            if (!_rolerepos.RoleExists(RoleId))
+            {
+                return NotFound(new
+                {
+                    statusCode = 404,
+                    message = "Record doesn't exist"
+                });
+            }
+            var existRole = await _rolerepos.GetRoleAsync(RoleId);
+            if (existRole == null)
+            {
+                return NotFound(new
+                {
+                    statusCode = 404,
+                    message = "Record not found"
+                });
+            }
+            await _rolerepos.DeleteRoleAsync(RoleId);
+            return NoContent();
+
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex.Message);
+            return StatusCode(StatusCodes.Status500InternalServerError, new
+            {
+                statusCode = 500,
+                message = ex.Message
+            });
+        }
+    }
 }

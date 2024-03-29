@@ -66,4 +66,8 @@ public class AdCampaignsRepository : IAdCampaignsRepository
             .Include(ac => ac.AdStatus)
             .AsNoTracking().FirstOrDefaultAsync(r => r.AdStatus.StatusId == StatusId);
     }
+    public async Task<ICollection<AdCampaign>> GetAdCampaignsInDecreasingOrderAsync()
+    {
+        return await _ctx.AdCampaigns.OrderByDescending(p => p.TotalBudget).ToListAsync();
+    }
 }

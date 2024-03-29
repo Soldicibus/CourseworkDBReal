@@ -30,4 +30,27 @@ public class RoleRepository : IRoleRepository
     {
         return await _ctx.UserRoles.Where(a => a.RoleId == id).Select(a => a.User).ToListAsync();
     }
+    public async Task<Role> CreateRoleAsync(Role role)
+    {
+        _ctx.Roles.Add(role);
+        await _ctx.SaveChangesAsync();
+        return role;
+    }
+    public async Task<Role> UpdateRoleAsync(Role role)
+    {
+        _ctx.Roles.Update(role);
+        await _ctx.SaveChangesAsync();
+        return role;
+    }
+    public async Task DeleteRoleAsync(int id)
+    {
+        var role = await _ctx.Roles.FindAsync(id);
+        if (role == null)
+        {
+            return;
+        }
+
+        _ctx.Roles.Remove(role);
+        await _ctx.SaveChangesAsync();
+    }
 }

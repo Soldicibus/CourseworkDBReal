@@ -7,7 +7,7 @@ using MySql.EntityFrameworkCore.Metadata;
 namespace CourseworkDB.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class InitializeComponent : Migration
+    public partial class TheUpdatedInit : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -247,8 +247,7 @@ namespace CourseworkDB.Data.Migrations
                     AdTitle = table.Column<string>(type: "longtext", nullable: false),
                     AdDescription = table.Column<string>(type: "longtext", nullable: true),
                     AdTypeTypeId = table.Column<int>(type: "int", nullable: false),
-                    AdUrl = table.Column<string>(type: "longtext", nullable: false),
-                    AdGroupGroupId = table.Column<int>(type: "int", nullable: true)
+                    AdUrl = table.Column<string>(type: "longtext", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -260,15 +259,32 @@ namespace CourseworkDB.Data.Migrations
                         principalColumn: "CampaignId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Ads_AdGroups_AdGroupGroupId",
-                        column: x => x.AdGroupGroupId,
-                        principalTable: "AdGroups",
-                        principalColumn: "GroupId");
-                    table.ForeignKey(
                         name: "FK_Ads_AdTypes_AdTypeTypeId",
                         column: x => x.AdTypeTypeId,
                         principalTable: "AdTypes",
                         principalColumn: "TypeId",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySQL:Charset", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "Payments",
+                columns: table => new
+                {
+                    PaymentId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
+                    AdGroupGroupId = table.Column<int>(type: "int", nullable: false),
+                    PaymentAmount = table.Column<float>(type: "float", nullable: false),
+                    PaymentDate = table.Column<DateTime>(type: "datetime(6)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Payments", x => x.PaymentId);
+                    table.ForeignKey(
+                        name: "FK_Payments_AdGroups_AdGroupGroupId",
+                        column: x => x.AdGroupGroupId,
+                        principalTable: "AdGroups",
+                        principalColumn: "GroupId",
                         onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySQL:Charset", "utf8mb4");
@@ -304,11 +320,6 @@ namespace CourseworkDB.Data.Migrations
                 column: "AdCampaignCampaignId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Ads_AdGroupGroupId",
-                table: "Ads",
-                column: "AdGroupGroupId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Ads_AdTypeTypeId",
                 table: "Ads",
                 column: "AdTypeTypeId");
@@ -322,6 +333,11 @@ namespace CourseworkDB.Data.Migrations
                 name: "IX_Advertisers_UserId",
                 table: "Advertisers",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Payments_AdGroupGroupId",
+                table: "Payments",
+                column: "AdGroupGroupId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Publishers_CompanyId",
@@ -346,13 +362,16 @@ namespace CourseworkDB.Data.Migrations
                 name: "Ads");
 
             migrationBuilder.DropTable(
+                name: "Payments");
+
+            migrationBuilder.DropTable(
                 name: "UserRole");
 
             migrationBuilder.DropTable(
-                name: "AdGroups");
+                name: "AdTypes");
 
             migrationBuilder.DropTable(
-                name: "AdTypes");
+                name: "AdGroups");
 
             migrationBuilder.DropTable(
                 name: "Roles");
