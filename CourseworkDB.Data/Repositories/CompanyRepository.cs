@@ -50,4 +50,27 @@ public class CompanyRepository : ICompanyRepository
     {
         return await _ctx.Companies.AsNoTracking().FirstOrDefaultAsync(u => u.CompanyEmail == email);
     }
+    public async Task<Company> CreateCompanyAsync(Company role)
+    {
+        _ctx.Companies.Add(role);
+        await _ctx.SaveChangesAsync();
+        return role;
+    }
+    public async Task<Company> UpdateCompanyAsync(Company role)
+    {
+        _ctx.Companies.Update(role);
+        await _ctx.SaveChangesAsync();
+        return role;
+    }
+    public async Task DeleteCompanyAsync(int id)
+    {
+        var role = await _ctx.Companies.FindAsync(id);
+        if (role == null)
+        {
+            return;
+        }
+
+        _ctx.Companies.Remove(role);
+        await _ctx.SaveChangesAsync();
+    }
 }
