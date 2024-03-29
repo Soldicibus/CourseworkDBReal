@@ -14,7 +14,7 @@ public class PublisherRepository : IPublisherRepository
     {
         return _ctx.Publishers.Any(r => r.PublisherId == PublisherId);
     }
-    public async Task<IEnumerable<Publisher>> GetAllPublishersAsync()
+    public async Task<ICollection<Publisher>> GetAllPublishersAsync()
     {
         return await _ctx.Publishers.Include(a => a.User).ToListAsync();
     }
@@ -27,5 +27,45 @@ public class PublisherRepository : IPublisherRepository
         return await _ctx.Publishers
         .Include(a => a.User)
         .Where(a => a.User.UserId == userId).ToListAsync();
+    }
+    public async Task<Publisher> AddPublisherAsync(Publisher publisher)
+    {
+        var user = await _ctx.Users.FindAsync(publisher.User.UserId);
+        if (user == null)
+        {
+            return null;
+        }
+        publisher.User = user;
+
+        _ctx.Publishers.Add(publisher);
+        await _ctx.SaveChangesAsync();
+
+        return publisher;
+    }
+    public async Task<Publisher> UpdatePublisherAsync(Publisher publisher)
+    {
+        var user = await _ctx.Users.FindAsync(publisher.User.UserId);
+        if (user == null)
+        {
+            return null;
+        }
+        publisher.User = user;
+
+        _ctx.Publishers.Update(publisher);
+        await _ctx.SaveChangesAsync();
+
+        return publisher;
+    }
+    public async Task DeletePublishersAsync(int publisherId)
+    {
+        var publisher = await _ctx.Publishers.FindAsync(publisherId);
+        if (publisher == null)
+        {
+            return;
+        }
+
+        _ctx.Publishers.Remove(publisher);
+        await _ctx.SaveChangesAsync();
+        return;
     }
 }

@@ -14,7 +14,7 @@ public class MappingProfiles : Profile
         CreateMap<Advertiser, AdvertiserDto>(); CreateMap<AdvertiserDto, Advertiser>();
         CreateMap<AdCampaign, AdCampaignDto>(); CreateMap<AdCampaignDto, AdCampaign>(); CreateMap<AdCampaign, AdCampaignCreationDto>(); CreateMap<AdCampaignCreationDto, AdCampaign>();
         CreateMap<AdGroup, AdGroupsDto>(); CreateMap<AdGroupsDto, AdGroup>();
-        CreateMap<Publisher, PublisherDto>(); CreateMap<PublisherDto, Publisher>();
+        CreateMap<Publisher, PublisherDto>(); CreateMap<PublisherDto, Publisher>(); CreateMap<Publisher, PublisherCreationDto>(); CreateMap<PublisherCreationDto, Publisher>();
         CreateMap<Ad, AdDto>(); CreateMap<AdDto, Ad>();
         CreateMap<Payment, PaymentDto>(); CreateMap<PaymentDto, Payment>();
         CreateMap<UserRole, UserRoleDto>();

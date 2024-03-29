@@ -4,9 +4,12 @@ namespace CourseworkDB.Data.Repositories
 {
     public interface IPublisherRepository
     {
-        Task<IEnumerable<Publisher>> GetAllPublishersAsync();
+        Task<Publisher> AddPublisherAsync(Publisher publisher);
+        Task DeletePublishersAsync(int publisherId);
+        Task<ICollection<Publisher>> GetAllPublishersAsync();
         Task<Publisher> GetPublisherByIdAsync(int id);
-        bool PublisherExist(int PublisherId);
         Task<IEnumerable<Publisher>> GetPublishersByUserId(int userId);
+        bool PublisherExist(int PublisherId);
+        Task<Publisher> UpdatePublisherAsync(Publisher publisher);
     }
 }

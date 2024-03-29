@@ -108,6 +108,7 @@ public class AdCampaignsRepository : IAdCampaignsRepository
 
         _ctx.AdCampaigns.Remove(adCampaign);
         await _ctx.SaveChangesAsync();
+        return;
     }
     public async Task<Ad> AddAdToAdCampaignAsync(int adCampaignId, int adId)
     {
