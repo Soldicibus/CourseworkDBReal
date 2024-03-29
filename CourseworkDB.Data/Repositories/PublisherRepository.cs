@@ -35,6 +35,11 @@ public class PublisherRepository : IPublisherRepository
         {
             return null;
         }
+        var userAlreadyHere = await _ctx.Publishers.AnyAsync(p => p.User.UserId == publisher.User.UserId);
+        if (userAlreadyHere)
+        {
+            return null;
+        }
         publisher.User = user;
 
         _ctx.Publishers.Add(publisher);
@@ -46,6 +51,11 @@ public class PublisherRepository : IPublisherRepository
     {
         var user = await _ctx.Users.FindAsync(publisher.User.UserId);
         if (user == null)
+        {
+            return null;
+        }
+        var userAlreadyHere = await _ctx.Publishers.AnyAsync(p => p.User.UserId == publisher.User.UserId);
+        if (userAlreadyHere)
         {
             return null;
         }
