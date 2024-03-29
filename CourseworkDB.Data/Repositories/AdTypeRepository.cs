@@ -26,5 +26,27 @@ public class AdTypeRepository : IAdTypeRepository
     {
         return await _ctx.AdTypes.AsNoTracking().FirstOrDefaultAsync(r => r.TypeName == typename);
     }
-    //Ads by ad type
+    public async Task<AdType> CreateAdTypeAsync(AdType adType)
+    {
+        _ctx.AdTypes.Add(adType);
+        await _ctx.SaveChangesAsync();
+        return adType;
+    }
+    public async Task<AdType> UpdateAdTypeAsync(AdType adType)
+    {
+        _ctx.AdTypes.Update(adType);
+        await _ctx.SaveChangesAsync();
+        return adType;
+    }
+    public async Task DeleteAdTypeAsync(int id)
+    {
+        var adType = await _ctx.AdTypes.FindAsync(id);
+        if (adType == null)
+        {
+            return;
+        }
+
+        _ctx.AdTypes.Remove(adType);
+        await _ctx.SaveChangesAsync();
+    }
 }

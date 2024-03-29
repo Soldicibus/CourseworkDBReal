@@ -26,5 +26,27 @@ public class AdStatusRepository : IAdStatusRepository
     {
         return await _ctx.AdStatuses.AsNoTracking().FirstOrDefaultAsync(r => r.StatusName == statusname);
     }
-    //AdCampaign by Status
+    public async Task<AdStatus> CreateAdStatusAsync(AdStatus adStatus)
+    {
+        _ctx.AdStatuses.Add(adStatus);
+        await _ctx.SaveChangesAsync();
+        return adStatus;
+    }
+    public async Task<AdStatus> UpdateAdStatusAsync(AdStatus adStatus)
+    {
+        _ctx.AdStatuses.Update(adStatus);
+        await _ctx.SaveChangesAsync();
+        return adStatus;
+    }
+    public async Task DeleteAdStatusAsync(int id)
+    {
+        var adStatus = await _ctx.AdStatuses.FindAsync(id);
+        if (adStatus == null)
+        {
+            return;
+        }
+
+        _ctx.AdStatuses.Remove(adStatus);
+        await _ctx.SaveChangesAsync();
+    }
 }

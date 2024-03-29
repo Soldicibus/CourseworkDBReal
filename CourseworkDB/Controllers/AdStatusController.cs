@@ -108,4 +108,88 @@ public class AdStatusController : Controller
             });
         }
     }
+    [HttpPost]
+    public async Task<IActionResult> AddAdStatuse(AdStatus adStatuse)
+    {
+        try
+        {
+            var createdAdStatuse = await _adStatusrepos.CreateAdStatusAsync(adStatuse);
+            return CreatedAtAction(nameof(AddAdStatuse), createdAdStatuse);
+
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex.Message);
+            return StatusCode(StatusCodes.Status500InternalServerError, new
+            {
+                statusCode = 500,
+                message = ex.Message
+            });
+        }
+    }
+    [HttpPut]
+    public async Task<IActionResult> UpdateAdStatuse(AdStatus adStatuseUpdated)
+    {
+        try
+        {
+            var existAdStatuse = await _adStatusrepos.GetAdStatusAsync(adStatuseUpdated.StatusId);
+            if (existAdStatuse == null)
+            {
+                return NotFound(new
+                {
+                    statusCode = 404,
+                    message = "Record not found"
+                });
+            }
+            existAdStatuse.StatusName = adStatuseUpdated.StatusName;
+            existAdStatuse.StatusDesc = adStatuseUpdated.StatusDesc;
+            await _adStatusrepos.UpdateAdStatusAsync(existAdStatuse);
+            return NoContent();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex.Message);
+            return StatusCode(StatusCodes.Status500InternalServerError, new
+            {
+                statusCode = 500,
+                message = ex.Message
+            });
+        }
+    }
+    [HttpDelete("{AdStatuseId}")]
+    public async Task<IActionResult> DeleteAdStatus(int AdStatuseId)
+    {
+        try
+        {
+            if (!_adStatusrepos.AdStatusExists(AdStatuseId))
+            {
+                return NotFound(new
+                {
+                    statusCode = 404,
+                    message = "Record doesn't exist"
+                });
+            }
+            var existAdStatuse = await _adStatusrepos.GetAdStatusAsync(AdStatuseId);
+            if (existAdStatuse == null)
+            {
+                return NotFound(new
+                {
+                    statusCode = 404,
+                    message = "Record not found"
+                });
+            }
+            await _adStatusrepos.DeleteAdStatusAsync(AdStatuseId);
+            return NoContent();
+
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex.Message);
+            return StatusCode(StatusCodes.Status500InternalServerError, new
+            {
+                statusCode = 500,
+                message = ex.Message
+            });
+        }
+    }
 }

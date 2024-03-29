@@ -1,4 +1,5 @@
-﻿using CourseworkDB.Data.Models;
+﻿using CourseworkDB.Data.Dto;
+using CourseworkDB.Data.Models;
 using CourseworkDB.Data.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
@@ -97,6 +98,90 @@ public class AdTypeController : Controller
                 });
             }
             else return Ok(adType);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex.Message);
+            return StatusCode(StatusCodes.Status500InternalServerError, new
+            {
+                statusCode = 500,
+                message = ex.Message
+            });
+        }
+    }
+    [HttpPost]
+    public async Task<IActionResult> AddAdType(AdType adType)
+    {
+        try
+        {
+            var createdAdType = await _adTyperepos.CreateAdTypeAsync(adType);
+            return CreatedAtAction(nameof(AddAdType), createdAdType);
+
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex.Message);
+            return StatusCode(StatusCodes.Status500InternalServerError, new
+            {
+                statusCode = 500,
+                message = ex.Message
+            });
+        }
+    }
+    [HttpPut]
+    public async Task<IActionResult> UpdateAdType(AdType adTypeUpdated)
+    {
+        try
+        {
+            var existAdType = await _adTyperepos.GetAdTypeAsync(adTypeUpdated.TypeId);
+            if (existAdType == null)
+            {
+                return NotFound(new
+                {
+                    statusCode = 404,
+                    message = "Record not found"
+                });
+            }
+            existAdType.TypeName = adTypeUpdated.TypeName;
+            existAdType.TypeDesc = adTypeUpdated.TypeDesc;
+            await _adTyperepos.UpdateAdTypeAsync(existAdType);
+            return NoContent();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex.Message);
+            return StatusCode(StatusCodes.Status500InternalServerError, new
+            {
+                statusCode = 500,
+                message = ex.Message
+            });
+        }
+    }
+    [HttpDelete("{AdTypeId}")]
+    public async Task<IActionResult> DeleteAdType(int AdTypeId)
+    {
+        try
+        {
+            if (!_adTyperepos.AdTypeExists(AdTypeId))
+            {
+                return NotFound(new
+                {
+                    statusCode = 404,
+                    message = "Record doesn't exist"
+                });
+            }
+            var existAdType = await _adTyperepos.GetAdTypeAsync(AdTypeId);
+            if (existAdType == null)
+            {
+                return NotFound(new
+                {
+                    statusCode = 404,
+                    message = "Record not found"
+                });
+            }
+            await _adTyperepos.DeleteAdTypeAsync(AdTypeId);
+            return NoContent();
+
         }
         catch (Exception ex)
         {
