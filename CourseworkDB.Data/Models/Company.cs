@@ -15,5 +15,5 @@ public class Company
     public string CompanyEmail { get; set; }
     public string? CompanyPhone { get; set; }
     public ICollection<Advertiser>? Advertisers { get; set; } = new List<Advertiser>();
-    public ICollection<Publisher>? Publishers { get; set; } = new List<Publisher>();
+    public Publisher? Publisher { get; set; }
 }

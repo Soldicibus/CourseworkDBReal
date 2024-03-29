@@ -7,7 +7,7 @@ using MySql.EntityFrameworkCore.Metadata;
 namespace CourseworkDB.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class UpdatedInit2 : Migration
+    public partial class Update3Init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -46,22 +46,6 @@ namespace CourseworkDB.Data.Migrations
                 .Annotation("MySQL:Charset", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Companies",
-                columns: table => new
-                {
-                    CompanyId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
-                    CompanyName = table.Column<string>(type: "longtext", nullable: false),
-                    CompanyEmail = table.Column<string>(type: "longtext", nullable: false),
-                    CompanyPhone = table.Column<string>(type: "longtext", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Companies", x => x.CompanyId);
-                })
-                .Annotation("MySQL:Charset", "utf8mb4");
-
-            migrationBuilder.CreateTable(
                 name: "Roles",
                 columns: table => new
                 {
@@ -92,49 +76,17 @@ namespace CourseworkDB.Data.Migrations
                 .Annotation("MySQL:Charset", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Advertisers",
-                columns: table => new
-                {
-                    AdvertiserId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
-                    UserId = table.Column<int>(type: "int", nullable: false),
-                    CompanyId = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Advertisers", x => x.AdvertiserId);
-                    table.ForeignKey(
-                        name: "FK_Advertisers_Companies_CompanyId",
-                        column: x => x.CompanyId,
-                        principalTable: "Companies",
-                        principalColumn: "CompanyId");
-                    table.ForeignKey(
-                        name: "FK_Advertisers_Users_UserId",
-                        column: x => x.UserId,
-                        principalTable: "Users",
-                        principalColumn: "UserId",
-                        onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySQL:Charset", "utf8mb4");
-
-            migrationBuilder.CreateTable(
                 name: "Publishers",
                 columns: table => new
                 {
                     PublisherId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
                     UserId = table.Column<int>(type: "int", nullable: false),
-                    WebsiteURL = table.Column<string>(type: "longtext", nullable: true),
-                    CompanyId = table.Column<int>(type: "int", nullable: true)
+                    WebsiteURL = table.Column<string>(type: "longtext", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Publishers", x => x.PublisherId);
-                    table.ForeignKey(
-                        name: "FK_Publishers_Companies_CompanyId",
-                        column: x => x.CompanyId,
-                        principalTable: "Companies",
-                        principalColumn: "CompanyId");
                     table.ForeignKey(
                         name: "FK_Publishers_Users_UserId",
                         column: x => x.UserId,
@@ -170,6 +122,28 @@ namespace CourseworkDB.Data.Migrations
                 .Annotation("MySQL:Charset", "utf8mb4");
 
             migrationBuilder.CreateTable(
+                name: "Companies",
+                columns: table => new
+                {
+                    CompanyId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
+                    CompanyName = table.Column<string>(type: "longtext", nullable: false),
+                    CompanyEmail = table.Column<string>(type: "longtext", nullable: false),
+                    CompanyPhone = table.Column<string>(type: "longtext", nullable: true),
+                    PublisherId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Companies", x => x.CompanyId);
+                    table.ForeignKey(
+                        name: "FK_Companies_Publishers_PublisherId",
+                        column: x => x.PublisherId,
+                        principalTable: "Publishers",
+                        principalColumn: "PublisherId");
+                })
+                .Annotation("MySQL:Charset", "utf8mb4");
+
+            migrationBuilder.CreateTable(
                 name: "AdCampaigns",
                 columns: table => new
                 {
@@ -179,10 +153,8 @@ namespace CourseworkDB.Data.Migrations
                     StartDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     EndDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     TotalBudget = table.Column<float>(type: "float", nullable: false),
-                    PublisherId = table.Column<int>(type: "int", nullable: false),
                     CompanyId = table.Column<int>(type: "int", nullable: false),
-                    AdStatusStatusId = table.Column<int>(type: "int", nullable: false),
-                    AdvertiserId = table.Column<int>(type: "int", nullable: true)
+                    AdStatusStatusId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -194,21 +166,36 @@ namespace CourseworkDB.Data.Migrations
                         principalColumn: "StatusId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_AdCampaigns_Advertisers_AdvertiserId",
-                        column: x => x.AdvertiserId,
-                        principalTable: "Advertisers",
-                        principalColumn: "AdvertiserId");
-                    table.ForeignKey(
                         name: "FK_AdCampaigns_Companies_CompanyId",
                         column: x => x.CompanyId,
                         principalTable: "Companies",
                         principalColumn: "CompanyId",
                         onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySQL:Charset", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "Advertisers",
+                columns: table => new
+                {
+                    AdvertiserId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    CompanyId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Advertisers", x => x.AdvertiserId);
                     table.ForeignKey(
-                        name: "FK_AdCampaigns_Publishers_PublisherId",
-                        column: x => x.PublisherId,
-                        principalTable: "Publishers",
-                        principalColumn: "PublisherId",
+                        name: "FK_Advertisers_Companies_CompanyId",
+                        column: x => x.CompanyId,
+                        principalTable: "Companies",
+                        principalColumn: "CompanyId");
+                    table.ForeignKey(
+                        name: "FK_Advertisers_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "UserId",
                         onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySQL:Charset", "utf8mb4");
@@ -295,19 +282,9 @@ namespace CourseworkDB.Data.Migrations
                 column: "AdStatusStatusId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_AdCampaigns_AdvertiserId",
-                table: "AdCampaigns",
-                column: "AdvertiserId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_AdCampaigns_CompanyId",
                 table: "AdCampaigns",
                 column: "CompanyId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AdCampaigns_PublisherId",
-                table: "AdCampaigns",
-                column: "PublisherId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AdGroups_AdCampaignCampaignId",
@@ -335,14 +312,14 @@ namespace CourseworkDB.Data.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Companies_PublisherId",
+                table: "Companies",
+                column: "PublisherId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Payments_AdGroupGroupId",
                 table: "Payments",
                 column: "AdGroupGroupId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Publishers_CompanyId",
-                table: "Publishers",
-                column: "CompanyId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Publishers_UserId",
@@ -360,6 +337,9 @@ namespace CourseworkDB.Data.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Ads");
+
+            migrationBuilder.DropTable(
+                name: "Advertisers");
 
             migrationBuilder.DropTable(
                 name: "Payments");
@@ -383,13 +363,10 @@ namespace CourseworkDB.Data.Migrations
                 name: "AdStatuses");
 
             migrationBuilder.DropTable(
-                name: "Advertisers");
+                name: "Companies");
 
             migrationBuilder.DropTable(
                 name: "Publishers");
-
-            migrationBuilder.DropTable(
-                name: "Companies");
 
             migrationBuilder.DropTable(
                 name: "Users");

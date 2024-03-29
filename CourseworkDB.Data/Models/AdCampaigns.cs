@@ -17,7 +17,6 @@ public class AdCampaign
     public DateTime EndDate { get; set;}
     [Required]
     public float TotalBudget { get; set;}
-    public Publisher Publisher { get; set; }
     public Company Company { get; set; }
     public AdStatus AdStatus { get; set; }
     public ICollection<AdGroup>? AdGroups { get; set; } = new List<AdGroup>();

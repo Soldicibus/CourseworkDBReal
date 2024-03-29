@@ -21,13 +21,12 @@ public class AdCampaignsRepository : IAdCampaignsRepository
     }
     public async Task<AdCampaign> GetAdCampaignAsync(int id)
     {
-        return await _ctx.AdCampaigns.Include(ac => ac.Publisher).Include(ac => ac.Company).Include(ac => ac.AdStatus)
+        return await _ctx.AdCampaigns.Include(ac => ac.Company).Include(ac => ac.AdStatus)
             .FirstOrDefaultAsync(r => r.CampaignId == id);
     }
     public async Task<AdCampaign> GetAdCampaignByNameAsync(string AdCampaignName)
     {
         return await _ctx.AdCampaigns
-            .Include(ac => ac.Publisher)
             .Include(ac => ac.Company)
             .Include(ac => ac.AdStatus)
             .FirstOrDefaultAsync(r => r.CampaignName == AdCampaignName);
@@ -36,7 +35,6 @@ public class AdCampaignsRepository : IAdCampaignsRepository
     {
         return await _ctx.AdCampaigns
             .AsNoTracking()
-            .Include(ac => ac.Publisher)
             .Include(ac => ac.Company)
             .Include(ac => ac.AdStatus)
             .FirstOrDefaultAsync(r => r.StartDate == date);
@@ -44,7 +42,6 @@ public class AdCampaignsRepository : IAdCampaignsRepository
     public async Task<AdCampaign> GetAdCampaignByEndDateAsync(DateTime date)
     {
         return await _ctx.AdCampaigns.AsNoTracking()
-            .Include(ac => ac.Publisher)
             .Include(ac => ac.Company)
             .Include(ac => ac.AdStatus)
             .FirstOrDefaultAsync(r => r.EndDate == date);
@@ -53,7 +50,6 @@ public class AdCampaignsRepository : IAdCampaignsRepository
     {
         return await _ctx.AdCampaigns
             .AsNoTracking()
-            .Include(ac => ac.Publisher)
             .Include(ac => ac.Company)
             .Include(ac => ac.AdStatus)
             .FirstOrDefaultAsync(r => r.Company.CompanyId == CompanyId);
@@ -62,7 +58,6 @@ public class AdCampaignsRepository : IAdCampaignsRepository
     {
         return await _ctx.AdCampaigns
             .AsNoTracking()
-            .Include(ac => ac.Publisher)
             .Include(ac => ac.Company)
             .Include(ac => ac.AdStatus)
             .AsNoTracking().FirstOrDefaultAsync(r => r.AdStatus.StatusId == StatusId);
@@ -73,14 +68,12 @@ public class AdCampaignsRepository : IAdCampaignsRepository
     }
     public async Task<AdCampaign> CreateAdCampaignAsync(AdCampaign adCampaign)
     {
-        var publisher = await _ctx.Publishers.FindAsync(adCampaign.Publisher.PublisherId);
         var adStatus = await _ctx.AdStatuses.FindAsync(adCampaign.AdStatus.StatusId);
         var company = await _ctx.Companies.FindAsync(adCampaign.Company.CompanyId);
-        if (publisher == null || company == null)
+        if (company == null)
         {
             return null;
         }
-        adCampaign.Publisher = publisher;
         adCampaign.Company = company;
         adCampaign.AdStatus = adStatus;
 
@@ -91,14 +84,12 @@ public class AdCampaignsRepository : IAdCampaignsRepository
     }
     public async Task<AdCampaign> UpdateAdCampaignAsync(AdCampaign adCampaign)
     {
-        var publisher = await _ctx.Publishers.FindAsync(adCampaign.Publisher.PublisherId);
         var adStatus = await _ctx.AdStatuses.FindAsync(adCampaign.AdStatus.StatusId);
         var company = await _ctx.Companies.FindAsync(adCampaign.Company.CompanyId);
-        if (publisher == null || company == null)
+        if (company == null)
         {
             return null;
         }
-        adCampaign.Publisher = publisher;
         adCampaign.Company = company;
         adCampaign.AdStatus = adStatus;
 
@@ -117,5 +108,29 @@ public class AdCampaignsRepository : IAdCampaignsRepository
 
         _ctx.AdCampaigns.Remove(adCampaign);
         await _ctx.SaveChangesAsync();
+    }
+    public async Task<Ad> AddAdToAdCampaignAsync(int adCampaignId, int adId)
+    {
+        var adCampaign = await _ctx.AdCampaigns.FindAsync(adCampaignId);
+        var ad = await _ctx.Ads.FindAsync(adId);
+        if (adCampaign == null || ad == null)
+        {
+            return null;
+        }
+        adCampaign.Ads.Add(ad);
+        await _ctx.SaveChangesAsync();
+        return ad;
+    }
+    public async Task<AdGroup> AddAdGroupToAdCampaignAsync(int adCampaignId, int adGroupId)
+    {
+        var adCampaign = await _ctx.AdCampaigns.FindAsync(adCampaignId);
+        var adGroup = await _ctx.AdGroups.FindAsync(adGroupId);
+        if (adCampaign == null || adGroup == null)
+        {
+            return null;
+        }
+        adCampaign.AdGroups.Add(adGroup);
+        await _ctx.SaveChangesAsync();
+        return adGroup;
     }
 }

@@ -12,5 +12,6 @@ public interface ICompanyRepository
     Task DeleteCompanyAsync(int id);
     Task<Company> UpdateCompanyAsync(Company role);
     Task<Company> CreateCompanyAsync(Company role);
+    Task<Advertiser> AddAdvertiserToCompanyAsync(int companyId, int advertiserId);
     bool IsValidEmail(string email);
 }

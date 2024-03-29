@@ -1,5 +1,6 @@
 ﻿using CourseworkDB.Data.Models;
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.Design;
 
 namespace CourseworkDB.Data.Repositories;
 
@@ -50,27 +51,52 @@ public class CompanyRepository : ICompanyRepository
     {
         return await _ctx.Companies.AsNoTracking().FirstOrDefaultAsync(u => u.CompanyEmail == email);
     }
-    public async Task<Company> CreateCompanyAsync(Company role)
+    public async Task<Company> CreateCompanyAsync(Company company)
     {
-        _ctx.Companies.Add(role);
+        var publisher = await _ctx.Publishers.FindAsync(company.Publisher.PublisherId);
+        if (publisher == null)
+        {
+            return null;
+        }
+        company.Publisher = publisher;
+
+        _ctx.Companies.Add(company);
         await _ctx.SaveChangesAsync();
-        return role;
+        return company;
     }
-    public async Task<Company> UpdateCompanyAsync(Company role)
+    public async Task<Company> UpdateCompanyAsync(Company company)
     {
-        _ctx.Companies.Update(role);
+        var publisher = await _ctx.Publishers.FindAsync(company.Publisher.PublisherId);
+        if (publisher == null)
+        {
+            return null;
+        }
+        company.Publisher = publisher;
+        _ctx.Companies.Update(company);
         await _ctx.SaveChangesAsync();
-        return role;
+        return company;
     }
     public async Task DeleteCompanyAsync(int id)
     {
-        var role = await _ctx.Companies.FindAsync(id);
-        if (role == null)
+        var company = await _ctx.Companies.FindAsync(id);
+        if (company == null)
         {
             return;
         }
 
-        _ctx.Companies.Remove(role);
+        _ctx.Companies.Remove(company);
         await _ctx.SaveChangesAsync();
+    }
+    public async Task<Advertiser> AddAdvertiserToCompanyAsync(int companyId, int advertiserId)
+    {
+        var company = await _ctx.Companies.FindAsync(companyId);
+        var advertiser = await _ctx.Advertisers.FindAsync(advertiserId);
+        if (company == null || advertiser == null)
+        {
+            throw new ArgumentException("Record not found");
+        }
+        company.Advertisers.Add(advertiser);
+        await _ctx.SaveChangesAsync();
+        return advertiser;
     }
 }

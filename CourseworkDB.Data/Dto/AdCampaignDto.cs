@@ -9,7 +9,6 @@ public class AdCampaignDto
     public DateTime StartDate { get; set; }
     public DateTime EndDate { get; set; }
     public float TotalBudget { get; set; }
-    public PublisherDto Publisher { get; set; }
     public CompanyDto Company { get; set; }
     public AdStatus AdStatus { get; set; }
 }

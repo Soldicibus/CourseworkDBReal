@@ -60,9 +60,6 @@ namespace CourseworkDB.Data.Migrations
                     b.Property<int>("AdStatusStatusId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("AdvertiserId")
-                        .HasColumnType("int");
-
                     b.Property<string>("CampaignName")
                         .IsRequired()
                         .HasColumnType("longtext");
@@ -72,9 +69,6 @@ namespace CourseworkDB.Data.Migrations
 
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("datetime(6)");
-
-                    b.Property<int>("PublisherId")
-                        .HasColumnType("int");
 
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime(6)");
@@ -86,11 +80,7 @@ namespace CourseworkDB.Data.Migrations
 
                     b.HasIndex("AdStatusStatusId");
 
-                    b.HasIndex("AdvertiserId");
-
                     b.HasIndex("CompanyId");
-
-                    b.HasIndex("PublisherId");
 
                     b.ToTable("AdCampaigns");
                 });
@@ -201,7 +191,12 @@ namespace CourseworkDB.Data.Migrations
                     b.Property<string>("CompanyPhone")
                         .HasColumnType("longtext");
 
+                    b.Property<int?>("PublisherId")
+                        .HasColumnType("int");
+
                     b.HasKey("CompanyId");
+
+                    b.HasIndex("PublisherId");
 
                     b.ToTable("Companies");
                 });
@@ -234,9 +229,6 @@ namespace CourseworkDB.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int?>("CompanyId")
-                        .HasColumnType("int");
-
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
@@ -244,8 +236,6 @@ namespace CourseworkDB.Data.Migrations
                         .HasColumnType("longtext");
 
                     b.HasKey("PublisherId");
-
-                    b.HasIndex("CompanyId");
 
                     b.HasIndex("UserId");
 
@@ -332,27 +322,15 @@ namespace CourseworkDB.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("CourseworkDB.Data.Models.Advertiser", null)
-                        .WithMany("AdCampaigns")
-                        .HasForeignKey("AdvertiserId");
-
                     b.HasOne("CourseworkDB.Data.Models.Company", "Company")
                         .WithMany()
                         .HasForeignKey("CompanyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("CourseworkDB.Data.Models.Publisher", "Publisher")
-                        .WithMany()
-                        .HasForeignKey("PublisherId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("AdStatus");
 
                     b.Navigation("Company");
-
-                    b.Navigation("Publisher");
                 });
 
             modelBuilder.Entity("CourseworkDB.Data.Models.AdGroup", b =>
@@ -381,6 +359,15 @@ namespace CourseworkDB.Data.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("CourseworkDB.Data.Models.Company", b =>
+                {
+                    b.HasOne("CourseworkDB.Data.Models.Publisher", "Publisher")
+                        .WithMany()
+                        .HasForeignKey("PublisherId");
+
+                    b.Navigation("Publisher");
+                });
+
             modelBuilder.Entity("CourseworkDB.Data.Models.Payment", b =>
                 {
                     b.HasOne("CourseworkDB.Data.Models.AdGroup", "AdGroup")
@@ -394,10 +381,6 @@ namespace CourseworkDB.Data.Migrations
 
             modelBuilder.Entity("CourseworkDB.Data.Models.Publisher", b =>
                 {
-                    b.HasOne("CourseworkDB.Data.Models.Company", null)
-                        .WithMany("Publishers")
-                        .HasForeignKey("CompanyId");
-
                     b.HasOne("CourseworkDB.Data.Models.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
@@ -433,16 +416,9 @@ namespace CourseworkDB.Data.Migrations
                     b.Navigation("Ads");
                 });
 
-            modelBuilder.Entity("CourseworkDB.Data.Models.Advertiser", b =>
-                {
-                    b.Navigation("AdCampaigns");
-                });
-
             modelBuilder.Entity("CourseworkDB.Data.Models.Company", b =>
                 {
                     b.Navigation("Advertisers");
-
-                    b.Navigation("Publishers");
                 });
 
             modelBuilder.Entity("CourseworkDB.Data.Models.Role", b =>

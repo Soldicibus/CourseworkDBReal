@@ -178,7 +178,7 @@ public class AdCampaignsController : Controller
         }
     }
     [HttpGet("{CompanyId}/adCampaign")]
-    [ProducesResponseType(200, Type = typeof(IEnumerable<AdCampaign>))]
+    [ProducesResponseType(200, Type = typeof(IEnumerable<Company>))]
     [ProducesResponseType(500)]
     [ProducesResponseType(404)]
     public async Task<IActionResult> GetAdCampaignByCompany(int CompanyId)
@@ -274,17 +274,14 @@ public class AdCampaignsController : Controller
     {
         try
         {
-            var publisher = await _ctx.Publishers.FindAsync(adCampaignCreationDto.PublisherId);
             var company = await _ctx.Companies.FindAsync(adCampaignCreationDto.CompanyId);
-            if (publisher == null || company == null)
+            if (company == null)
             {
                 return NotFound("Publisher or Company not found");
             }
 
             var adCampaign = _mapper.Map<AdCampaign>(adCampaignCreationDto);
-            adCampaign.Publisher = publisher;
             adCampaign.Company = company;
-
             var createdAdCampaign = await _adCampaignrepos.CreateAdCampaignAsync(adCampaign);
             return CreatedAtAction(nameof(AddAdCampaign), createdAdCampaign);
         }
@@ -303,9 +300,8 @@ public class AdCampaignsController : Controller
     {
         try
         {
-            var publisher = await _ctx.Publishers.FindAsync(adCampaignDto.PublisherId);
             var company = await _ctx.Companies.FindAsync(adCampaignDto.CompanyId);
-            if (publisher == null || company == null)
+            if (company == null)
             {
                 return NotFound("Publisher or Company not found");
             }
@@ -319,8 +315,6 @@ public class AdCampaignsController : Controller
                     message = "Record not found"
                 });
             }
-
-            existAdCampaign.Publisher = publisher;
             existAdCampaign.Company = company;
             existAdCampaign.CampaignName = adCampaignDto.CampaignName;
             existAdCampaign.StartDate = adCampaignDto.StartDate;
@@ -365,6 +359,76 @@ public class AdCampaignsController : Controller
             await _adCampaignrepos.DeleteAdCampaignAsync(AdCampaignId);
             return NoContent();
 
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex.Message);
+            return StatusCode(StatusCodes.Status500InternalServerError, new
+            {
+                statusCode = 500,
+                message = ex.Message
+            });
+        }
+    }
+    [HttpPut]
+    public async Task<IActionResult> AddAdGroupToAdCampaign(int adCampaignId, int adGroupId)
+    {
+        try
+        {
+            if (!_adCampaignrepos.AdCampaignExists(adCampaignId))
+            {
+                return NotFound(new
+                {
+                    statusCode = 404,
+                    message = "Record doesn't exist"
+                });
+            }
+            var adCampaign = await _adCampaignrepos.GetAdCampaignAsync(adCampaignId);
+            if (adCampaign == null)
+            {
+                return NotFound(new
+                {
+                    statusCode = 404,
+                    message = "Record not found"
+                });
+            }
+            var addedAdGroup = await _adCampaignrepos.AddAdGroupToAdCampaignAsync(adCampaignId, adGroupId);
+            return CreatedAtAction(nameof(AddAdCampaign), addedAdGroup);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex.Message);
+            return StatusCode(StatusCodes.Status500InternalServerError, new
+            {
+                statusCode = 500,
+                message = ex.Message
+            });
+        }
+    }
+    [HttpPut]
+    public async Task<IActionResult> AddAdToAdCampaign(int adCampaignId, int adId)
+    {
+        try
+        {
+            if (!_adCampaignrepos.AdCampaignExists(adCampaignId))
+            {
+                return NotFound(new
+                {
+                    statusCode = 404,
+                    message = "Record doesn't exist"
+                });
+            }
+            var adCampaign = await _adCampaignrepos.GetAdCampaignAsync(adCampaignId);
+            if (adCampaign == null)
+            {
+                return NotFound(new
+                {
+                    statusCode = 404,
+                    message = "Record not found"
+                });
+            }
+            var addedAd = await _adCampaignrepos.AddAdToAdCampaignAsync(adCampaignId, adId);
+            return CreatedAtAction(nameof(AddAdCampaign), addedAd);
         }
         catch (Exception ex)
         {
