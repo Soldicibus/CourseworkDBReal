@@ -13,12 +13,14 @@ public class AdCampaignsController : Controller
     private readonly IAdCampaignsRepository _adCampaignrepos;
     private readonly ILogger<AdCampaignsController> _logger;
     private readonly IMapper _mapper;
+    private readonly DataContext _ctx;
 
-    public AdCampaignsController(IAdCampaignsRepository adCampaignrepos, ILogger<AdCampaignsController> logger, IMapper mapper)
+    public AdCampaignsController(IAdCampaignsRepository adCampaignrepos, ILogger<AdCampaignsController> logger, IMapper mapper, DataContext ctx)
     {
         _adCampaignrepos = adCampaignrepos;
         _logger = logger;
         _mapper = mapper;
+        _ctx = ctx;
     }
     [HttpGet]
     [ProducesResponseType(200, Type = typeof(IEnumerable<AdCampaign>))]
@@ -256,6 +258,113 @@ public class AdCampaignsController : Controller
                 });
             }
             else return Ok(adCampaign);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex.Message);
+            return StatusCode(StatusCodes.Status500InternalServerError, new
+            {
+                statusCode = 500,
+                message = ex.Message
+            });
+        }
+    }
+    [HttpPost]
+    public async Task<IActionResult> AddAdCampaign(AdCampaignCreationDto adCampaignCreationDto)
+    {
+        try
+        {
+            var publisher = await _ctx.Publishers.FindAsync(adCampaignCreationDto.PublisherId);
+            var company = await _ctx.Companies.FindAsync(adCampaignCreationDto.CompanyId);
+            if (publisher == null || company == null)
+            {
+                return NotFound("Publisher or Company not found");
+            }
+
+            var adCampaign = _mapper.Map<AdCampaign>(adCampaignCreationDto);
+            adCampaign.Publisher = publisher;
+            adCampaign.Company = company;
+
+            var createdAdCampaign = await _adCampaignrepos.CreateAdCampaignAsync(adCampaign);
+            return CreatedAtAction(nameof(AddAdCampaign), createdAdCampaign);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex.Message);
+            return StatusCode(StatusCodes.Status500InternalServerError, new
+            {
+                statusCode = 500,
+                message = ex.Message
+            });
+        }
+    }
+    [HttpPut]
+    public async Task<IActionResult> UpdateAdCampaign(AdCampaignCreationDto adCampaignDto)
+    {
+        try
+        {
+            var publisher = await _ctx.Publishers.FindAsync(adCampaignDto.PublisherId);
+            var company = await _ctx.Companies.FindAsync(adCampaignDto.CompanyId);
+            if (publisher == null || company == null)
+            {
+                return NotFound("Publisher or Company not found");
+            }
+
+            var existAdCampaign = await _adCampaignrepos.GetAdCampaignAsync(adCampaignDto.CampaignId);
+            if (existAdCampaign == null)
+            {
+                return NotFound(new
+                {
+                    statusCode = 404,
+                    message = "Record not found"
+                });
+            }
+
+            existAdCampaign.Publisher = publisher;
+            existAdCampaign.Company = company;
+            existAdCampaign.CampaignName = adCampaignDto.CampaignName;
+            existAdCampaign.StartDate = adCampaignDto.StartDate;
+            existAdCampaign.EndDate = adCampaignDto.EndDate;
+            existAdCampaign.TotalBudget = adCampaignDto.TotalBudget;
+
+            await _adCampaignrepos.UpdateAdCampaignAsync(existAdCampaign);
+            return NoContent();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex.Message);
+            return StatusCode(StatusCodes.Status500InternalServerError, new
+            {
+                statusCode = 500,
+                message = ex.Message
+            });
+        }
+    }
+    [HttpDelete("{AdCampaignId}")]
+    public async Task<IActionResult> DeleteAdCampaign(int AdCampaignId)
+    {
+        try
+        {
+            if (!_adCampaignrepos.AdCampaignExists(AdCampaignId))
+            {
+                return NotFound(new
+                {
+                    statusCode = 404,
+                    message = "Record doesn't exist"
+                });
+            }
+            var existAdCampaign = await _adCampaignrepos.GetAdCampaignAsync(AdCampaignId);
+            if (existAdCampaign == null)
+            {
+                return NotFound(new
+                {
+                    statusCode = 404,
+                    message = "Record not found"
+                });
+            }
+            await _adCampaignrepos.DeleteAdCampaignAsync(AdCampaignId);
+            return NoContent();
+
         }
         catch (Exception ex)
         {

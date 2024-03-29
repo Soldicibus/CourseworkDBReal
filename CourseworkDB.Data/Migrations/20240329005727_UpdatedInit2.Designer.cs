@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CourseworkDB.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240328234141_TheUpdatedInit")]
-    partial class TheUpdatedInit
+    [Migration("20240329005727_UpdatedInit2")]
+    partial class UpdatedInit2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

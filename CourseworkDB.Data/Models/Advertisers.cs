@@ -10,5 +10,5 @@ public class Advertiser
     [Required]
     public int AdvertiserId { get; set; }
     public User User { get; set; }
-    public ICollection<AdCampaign> AdCampaigns { get; set; } = new List<AdCampaign>();
+    public ICollection<AdCampaign>? AdCampaigns { get; set; } = new List<AdCampaign>();
 }

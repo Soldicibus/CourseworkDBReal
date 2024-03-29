@@ -7,7 +7,7 @@ using MySql.EntityFrameworkCore.Metadata;
 namespace CourseworkDB.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class TheUpdatedInit : Migration
+    public partial class UpdatedInit2 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

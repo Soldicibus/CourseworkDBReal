@@ -1,4 +1,5 @@
-﻿using CourseworkDB.Data.Models;
+﻿using CourseworkDB.Data.Dto;
+using CourseworkDB.Data.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace CourseworkDB.Data.Repositories;
@@ -69,5 +70,52 @@ public class AdCampaignsRepository : IAdCampaignsRepository
     public async Task<ICollection<AdCampaign>> GetAdCampaignsInDecreasingOrderAsync()
     {
         return await _ctx.AdCampaigns.OrderByDescending(p => p.TotalBudget).ToListAsync();
+    }
+    public async Task<AdCampaign> CreateAdCampaignAsync(AdCampaign adCampaign)
+    {
+        var publisher = await _ctx.Publishers.FindAsync(adCampaign.Publisher.PublisherId);
+        var adStatus = await _ctx.AdStatuses.FindAsync(adCampaign.AdStatus.StatusId);
+        var company = await _ctx.Companies.FindAsync(adCampaign.Company.CompanyId);
+        if (publisher == null || company == null)
+        {
+            return null;
+        }
+        adCampaign.Publisher = publisher;
+        adCampaign.Company = company;
+        adCampaign.AdStatus = adStatus;
+
+        _ctx.AdCampaigns.Add(adCampaign);
+        await _ctx.SaveChangesAsync();
+
+        return adCampaign;
+    }
+    public async Task<AdCampaign> UpdateAdCampaignAsync(AdCampaign adCampaign)
+    {
+        var publisher = await _ctx.Publishers.FindAsync(adCampaign.Publisher.PublisherId);
+        var adStatus = await _ctx.AdStatuses.FindAsync(adCampaign.AdStatus.StatusId);
+        var company = await _ctx.Companies.FindAsync(adCampaign.Company.CompanyId);
+        if (publisher == null || company == null)
+        {
+            return null;
+        }
+        adCampaign.Publisher = publisher;
+        adCampaign.Company = company;
+        adCampaign.AdStatus = adStatus;
+
+        _ctx.AdCampaigns.Update(adCampaign);
+        await _ctx.SaveChangesAsync();
+
+        return adCampaign;
+    }
+    public async Task DeleteAdCampaignAsync(int id)
+    {
+        var adCampaign = await _ctx.AdCampaigns.FindAsync(id);
+        if (adCampaign == null)
+        {
+            return;
+        }
+
+        _ctx.AdCampaigns.Remove(adCampaign);
+        await _ctx.SaveChangesAsync();
     }
 }
