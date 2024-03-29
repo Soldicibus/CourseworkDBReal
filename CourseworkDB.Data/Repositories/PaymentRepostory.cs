@@ -36,4 +36,49 @@ public class PaymentRepository : IPaymentRepository
     {
         return await _ctx.Payments.OrderByDescending(p => p.PaymentAmount).ToListAsync();
     }
+    public async Task<Payment> AddPaymentAsync(Payment payment)
+    {
+        var adGroups = await _ctx.AdGroups.FindAsync(payment.AdGroup.GroupId);
+        if (adGroups == null)
+        {
+            return null;
+        }
+        var adGroupsAlreadyHere = await _ctx.Payments.AnyAsync(p => p.AdGroup.GroupId == payment.AdGroup.GroupId);
+        if (adGroupsAlreadyHere)
+        {
+            return null;
+        }
+        payment.AdGroup = adGroups;
+
+        _ctx.Payments.Add(payment);
+        await _ctx.SaveChangesAsync();
+
+        return payment;
+    }
+    public async Task<Payment> UpdatePaymentAsync(Payment payment)
+    {
+        var adGroups = await _ctx.AdGroups.FindAsync(payment.AdGroup.GroupId);
+        if (adGroups == null)
+        {
+            return null;
+        }
+        payment.AdGroup = adGroups;
+
+        _ctx.Payments.Update(payment);
+        await _ctx.SaveChangesAsync();
+
+        return payment;
+    }
+    public async Task DeletePaymentsAsync(int paymentId)
+    {
+        var payment = await _ctx.Payments.FindAsync(paymentId);
+        if (payment == null)
+        {
+            return;
+        }
+
+        _ctx.Payments.Remove(payment);
+        await _ctx.SaveChangesAsync();
+        return;
+    }
 }

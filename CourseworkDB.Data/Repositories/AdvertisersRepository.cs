@@ -55,11 +55,6 @@ public class AdvertisersRepository : IAdvertisersRepository
         {
             return null;
         }
-        var userAlreadyHere = await _ctx.Advertisers.AnyAsync(p => p.User.UserId == advertiser.User.UserId);
-        if (userAlreadyHere)
-        {
-            return null;
-        }
         advertiser.User = user;
 
         _ctx.Advertisers.Update(advertiser);

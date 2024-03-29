@@ -54,11 +54,6 @@ public class PublisherRepository : IPublisherRepository
         {
             return null;
         }
-        var userAlreadyHere = await _ctx.Publishers.AnyAsync(p => p.User.UserId == publisher.User.UserId);
-        if (userAlreadyHere)
-        {
-            return null;
-        }
         publisher.User = user;
 
         _ctx.Publishers.Update(publisher);
