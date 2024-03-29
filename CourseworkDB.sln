@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CourseworkDB.Api", "Coursew
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CourseworkDB.Data", "CourseworkDB.Data\CourseworkDB.Data.csproj", "{47FBC7AC-D026-4B2D-AEB6-D01BB0A1D04F}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CourseworkDB.App", "CourseworkDB.App\CourseworkDB.App.csproj", "{781EFEB1-D67F-4D7E-AA6C-E0D0F4663755}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{47FBC7AC-D026-4B2D-AEB6-D01BB0A1D04F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{47FBC7AC-D026-4B2D-AEB6-D01BB0A1D04F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{47FBC7AC-D026-4B2D-AEB6-D01BB0A1D04F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{781EFEB1-D67F-4D7E-AA6C-E0D0F4663755}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{781EFEB1-D67F-4D7E-AA6C-E0D0F4663755}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{781EFEB1-D67F-4D7E-AA6C-E0D0F4663755}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{781EFEB1-D67F-4D7E-AA6C-E0D0F4663755}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -35,10 +35,10 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-var options = new DefaultFilesOptions();
+/*var options = new DefaultFilesOptions();
 options.DefaultFileNames.Clear();
 options.DefaultFileNames.Add("index.html");
-app.UseDefaultFiles(options);
+app.UseDefaultFiles(options);*/
 
 app.UseStaticFiles();
 
