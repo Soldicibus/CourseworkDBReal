@@ -122,7 +122,7 @@ public class AdCampaignsRepository : IAdCampaignsRepository
         await _ctx.SaveChangesAsync();
         return ad;
     }
-    public async Task<AdGroup> AddAdGroupToAdCampaignAsync(int adCampaignId, int adGroupId)
+    /*public async Task<AdGroup> AddAdGroupToAdCampaignAsync(int adCampaignId, int adGroupId)
     {
         var adCampaign = await _ctx.AdCampaigns.FindAsync(adCampaignId);
         var adGroup = await _ctx.AdGroups.FindAsync(adGroupId);
@@ -133,5 +133,5 @@ public class AdCampaignsRepository : IAdCampaignsRepository
         adCampaign.AdGroups.Add(adGroup);
         await _ctx.SaveChangesAsync();
         return adGroup;
-    }
+    }*/
 }

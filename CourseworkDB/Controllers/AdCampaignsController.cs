@@ -370,7 +370,7 @@ public class AdCampaignsController : Controller
             });
         }
     }
-    [HttpPut]
+    /*[HttpPut]
     public async Task<IActionResult> AddAdGroupToAdCampaign(int adCampaignId, int adGroupId)
     {
         try
@@ -404,7 +404,7 @@ public class AdCampaignsController : Controller
                 message = ex.Message
             });
         }
-    }
+    }*/
     [HttpPut]
     public async Task<IActionResult> AddAdToAdCampaign(int adCampaignId, int adId)
     {

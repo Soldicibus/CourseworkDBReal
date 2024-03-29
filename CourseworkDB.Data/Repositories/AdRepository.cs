@@ -34,4 +34,24 @@ public class AdRepository : IAdRepository
     {
         return await _ctx.Ads.Include(a => a.AdType).Include(a => a.AdCampaign).FirstOrDefaultAsync(r => r.AdTitle == title);
     }
+    public async Task<Ad> CreateAdAsync(Ad ad)
+    {
+        _ctx.Ads.Add(ad);
+        await _ctx.SaveChangesAsync();
+        return ad;
+    }
+        public async Task DeleteAdAsync(int adId)
+    {
+        var ad = await _ctx.Ads.FindAsync(adId);
+        if (ad == null)
+        {
+            return;
+        }
+
+        _ctx.Ads.Remove(ad);
+        await _ctx.SaveChangesAsync();
+        return;
+    }
+
+
 }

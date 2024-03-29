@@ -20,30 +20,56 @@ public class AdGroupsRepository : IAdGroupsRepository
     }
     public async Task<AdGroup> GetAdGroupAsync(int id)
     {
-        return await _ctx.AdGroups.Include(ac => ac.AdCampaign)
-            .FirstOrDefaultAsync(r => r.GroupId == id);
+        return await _ctx.AdGroups.FirstOrDefaultAsync(r => r.GroupId == id);
     }
     public async Task<AdGroup> GetAdGroupByNameAsync(string AdGroupName)
     {
-        return await _ctx.AdGroups
-            .Include(ac => ac.AdCampaign)
-            .FirstOrDefaultAsync(r => r.GroupName == AdGroupName);
-    }
-    public async Task<AdGroup> GetAdGroupByCampaignAsync(int CampaignId)
-    {
-        return await _ctx.AdGroups
-            .AsNoTracking()
-            .Include(ac => ac.AdCampaign)
-            .FirstOrDefaultAsync(r => r.AdCampaign.CampaignId == CampaignId);
+        return await _ctx.AdGroups.FirstOrDefaultAsync(r => r.GroupName == AdGroupName);
     }
     public async Task<AdGroup> GetAdGroupByAudienceAsync(string Audience)
     {
-        return await _ctx.AdGroups.AsNoTracking()
-            .Include(ac => ac.AdCampaign)
-            .FirstOrDefaultAsync(r => r.Audience == Audience);
+        return await _ctx.AdGroups.AsNoTracking().FirstOrDefaultAsync(r => r.Audience == Audience);
     }
     public async Task<ICollection<AdGroup>> GetAdGroupsInDecreasingOrderAsync()
     {
         return await _ctx.AdGroups.OrderByDescending(p => p.BidAmount).ToListAsync();
+    }
+    public async Task<AdGroup> AddAdGroupAsync(AdGroup adGroup)
+    {
+        _ctx.AdGroups.Add(adGroup);
+        await _ctx.SaveChangesAsync();
+
+        return adGroup;
+    }
+    public async Task<AdGroup> UpdateAdGroupAsync(AdGroup adGroup)
+    {
+        _ctx.AdGroups.Update(adGroup);
+        await _ctx.SaveChangesAsync();
+
+        return adGroup;
+    }
+    public async Task DeleteAdGroupsAsync(int adGroupId)
+    {
+        var adGroup = await _ctx.AdGroups.FindAsync(adGroupId);
+        if (adGroup == null)
+        {
+            return;
+        }
+
+        _ctx.AdGroups.Remove(adGroup);
+        await _ctx.SaveChangesAsync();
+        return;
+    }
+    public async Task<AdCampaign> AddAdCampaignToAdGroupAsync(int adGroupId, int adCampaignId)
+    {
+        var adCampaign = await _ctx.AdCampaigns.FindAsync(adCampaignId);
+        var adGroup = await _ctx.AdGroups.FindAsync(adGroupId);
+        if (adCampaign == null || adGroup == null)
+        {
+            return null;
+        }
+        adGroup.AdCampaigns.Add(adCampaign);
+        await _ctx.SaveChangesAsync();
+        return adCampaign;
     }
 }

@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CourseworkDB.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240329111445_Update3Init")]
-    partial class Update3Init
+    [Migration("20240329175725_Update5Init")]
+    partial class Update5Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -60,6 +60,9 @@ namespace CourseworkDB.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    b.Property<int>("AdGroupGroupId")
+                        .HasColumnType("int");
+
                     b.Property<int>("AdStatusStatusId")
                         .HasColumnType("int");
 
@@ -81,6 +84,8 @@ namespace CourseworkDB.Data.Migrations
 
                     b.HasKey("CampaignId");
 
+                    b.HasIndex("AdGroupGroupId");
+
                     b.HasIndex("AdStatusStatusId");
 
                     b.HasIndex("CompanyId");
@@ -92,9 +97,6 @@ namespace CourseworkDB.Data.Migrations
                 {
                     b.Property<int>("GroupId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<int>("AdCampaignCampaignId")
                         .HasColumnType("int");
 
                     b.Property<string>("Audience")
@@ -112,8 +114,6 @@ namespace CourseworkDB.Data.Migrations
                         .HasColumnType("longtext");
 
                     b.HasKey("GroupId");
-
-                    b.HasIndex("AdCampaignCampaignId");
 
                     b.ToTable("AdGroups");
                 });
@@ -319,6 +319,12 @@ namespace CourseworkDB.Data.Migrations
 
             modelBuilder.Entity("CourseworkDB.Data.Models.AdCampaign", b =>
                 {
+                    b.HasOne("CourseworkDB.Data.Models.AdGroup", "AdGroup")
+                        .WithMany("AdCampaigns")
+                        .HasForeignKey("AdGroupGroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("CourseworkDB.Data.Models.AdStatus", "AdStatus")
                         .WithMany()
                         .HasForeignKey("AdStatusStatusId")
@@ -331,20 +337,11 @@ namespace CourseworkDB.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("AdGroup");
+
                     b.Navigation("AdStatus");
 
                     b.Navigation("Company");
-                });
-
-            modelBuilder.Entity("CourseworkDB.Data.Models.AdGroup", b =>
-                {
-                    b.HasOne("CourseworkDB.Data.Models.AdCampaign", "AdCampaign")
-                        .WithMany("AdGroups")
-                        .HasForeignKey("AdCampaignCampaignId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("AdCampaign");
                 });
 
             modelBuilder.Entity("CourseworkDB.Data.Models.Advertiser", b =>
@@ -414,9 +411,12 @@ namespace CourseworkDB.Data.Migrations
 
             modelBuilder.Entity("CourseworkDB.Data.Models.AdCampaign", b =>
                 {
-                    b.Navigation("AdGroups");
-
                     b.Navigation("Ads");
+                });
+
+            modelBuilder.Entity("CourseworkDB.Data.Models.AdGroup", b =>
+                {
+                    b.Navigation("AdCampaigns");
                 });
 
             modelBuilder.Entity("CourseworkDB.Data.Models.Company", b =>

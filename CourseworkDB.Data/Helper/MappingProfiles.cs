@@ -13,7 +13,7 @@ public class MappingProfiles : Profile
         CreateMap<Company, CompanyDto>(); CreateMap<CompanyDto, Company>(); CreateMap<Company, CompanyCreationDto>(); CreateMap<CompanyCreationDto, Company>();
         CreateMap<Advertiser, AdvertiserDto>(); CreateMap<AdvertiserDto, Advertiser>(); CreateMap<Advertiser, AdvertiserCreationDto>(); CreateMap<AdvertiserCreationDto, Advertiser>();
         CreateMap<AdCampaign, AdCampaignDto>(); CreateMap<AdCampaignDto, AdCampaign>(); CreateMap<AdCampaign, AdCampaignCreationDto>(); CreateMap<AdCampaignCreationDto, AdCampaign>();
-        CreateMap<AdGroup, AdGroupsDto>(); CreateMap<AdGroupsDto, AdGroup>();
+        CreateMap<AdGroup, AdGroupsDto>(); CreateMap<AdGroupsDto, AdGroup>(); //CreateMap<AdGroup, AdGroupsCreationDto>(); CreateMap<AdGroupsCreationDto, AdGroup>();
         CreateMap<Publisher, PublisherDto>(); CreateMap<PublisherDto, Publisher>(); CreateMap<Publisher, PublisherCreationDto>(); CreateMap<PublisherCreationDto, Publisher>();
         CreateMap<Ad, AdDto>(); CreateMap<AdDto, Ad>();
         CreateMap<Payment, PaymentDto>(); CreateMap<PaymentDto, Payment>(); CreateMap<Payment, PaymentCreationDto>(); CreateMap<PaymentCreationDto, Payment>();

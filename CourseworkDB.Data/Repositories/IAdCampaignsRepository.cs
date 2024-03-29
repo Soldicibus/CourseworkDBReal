@@ -15,7 +15,7 @@ namespace CourseworkDB.Data.Repositories
         Task<AdCampaign> UpdateAdCampaignAsync(AdCampaign adCampaign);
         Task<AdCampaign> CreateAdCampaignAsync(AdCampaign adCampaign);
         Task<ICollection<AdCampaign>> GetAdCampaignsInDecreasingOrderAsync();
-        Task<AdGroup> AddAdGroupToAdCampaignAsync(int adCampaignId, int adGroupId);
+        //Task<AdGroup> AddAdGroupToAdCampaignAsync(int adCampaignId, int adGroupId);
         Task<Ad> AddAdToAdCampaignAsync(int adCampaignId, int adId);
         Task<ICollection<AdCampaign>> GetAdCampaignsAsync();
     }

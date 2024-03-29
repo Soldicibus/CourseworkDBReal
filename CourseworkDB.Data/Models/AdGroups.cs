@@ -14,7 +14,7 @@ public class AdGroup
     [Required]
     public string Audience { get; set; }
     public string? Description { get; set; }
-    public AdCampaign AdCampaign { get; set; }
+    public ICollection<AdCampaign>? AdCampaigns { get; set; } = new List<AdCampaign>();
     [Required]
     public float BidAmount { get; set; }
 }
