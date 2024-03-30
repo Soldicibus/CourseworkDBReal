@@ -25,4 +25,98 @@ public class UserController : Controller
         }
         return View(userList);
     }
+    [HttpGet]
+    public IActionResult Edit(int id)
+    {
+        HttpResponseMessage response = _client.GetAsync(_client.BaseAddress + "/User/GetUserById/" + id).Result;
+        if (response.IsSuccessStatusCode)
+        {
+            string data = response.Content.ReadAsStringAsync().Result;
+            User user = JsonConvert.DeserializeObject<User>(data);
+            return View(user);
+        }
+        else
+        {
+            return NotFound();
+        }
+    }
+
+    [HttpPost]
+    public IActionResult Edit(User user)
+    {
+        HttpResponseMessage response = _client.PutAsJsonAsync(_client.BaseAddress + "/User/UpdateUser", user).Result;
+        if (response.IsSuccessStatusCode)
+        {
+            return RedirectToAction("Index");
+        }
+        else
+        {
+            return View(user);
+        }
+    }
+
+    [HttpGet]
+    public IActionResult Details(int id)
+    {
+        HttpResponseMessage response = _client.GetAsync(_client.BaseAddress + "/User/GetUserById/" + id).Result;
+        if (response.IsSuccessStatusCode)
+        {
+            string data = response.Content.ReadAsStringAsync().Result;
+            User user = JsonConvert.DeserializeObject<User>(data);
+            return View(user);
+        }
+        else
+        {
+            return NotFound();
+        }
+    }
+
+    [HttpGet]
+    public IActionResult Delete(int id)
+    {
+        HttpResponseMessage response = _client.GetAsync(_client.BaseAddress + "/User/GetUserById/" + id).Result;
+        if (response.IsSuccessStatusCode)
+        {
+            string data = response.Content.ReadAsStringAsync().Result;
+            User user = JsonConvert.DeserializeObject<User>(data);
+            return View(user);
+        }
+        else
+        {
+            return NotFound();
+        }
+    }
+
+    [HttpPost]
+    public IActionResult Delete(User user)
+    {
+        HttpResponseMessage response = _client.DeleteAsync(_client.BaseAddress + "/User/DeleteUser/" + user.UserId).Result;
+        if (response.IsSuccessStatusCode)
+        {
+            return RedirectToAction("Index");
+        }
+        else
+        {
+            return NotFound();
+        }
+    }
+    [HttpGet]
+    public IActionResult Create()
+    {
+        return View();
+    }
+
+    [HttpPost]
+    public IActionResult Create(User user)
+    {
+        HttpResponseMessage response = _client.PostAsJsonAsync(_client.BaseAddress + "/User/CreateUser", user).Result;
+        if (response.IsSuccessStatusCode)
+        {
+            return RedirectToAction("Index");
+        }
+        else
+        {
+            return View(user);
+        }
+    }
 }

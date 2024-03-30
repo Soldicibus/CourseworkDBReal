@@ -1,29 +1,24 @@
 ﻿@model IEnumerable<CourseworkDB.Data.Models.User>
+
+@{
+    ViewData["Title"] = "User";
+}
+
+<!DOCTYPE html>
+<html>
 <head>
+    <meta charset="utf-8" />
+    <title>@ViewData["Title"]</title>
     <script type="text/javascript">
-        /*window.addEventListener('scroll', function () {
-            var scrollPosition = window.pageYOffset;
-            document.body.style.backgroundPosition = 'center ' + (scrollPosition * 0.2) + 'px';
-        });*/
         window.addEventListener('scroll', function () {
             var scrollPosition = window.pageYOffset;
             document.body.style.setProperty('--scroll-position', scrollPosition * 0.5 + 'px');
         });
-
     </script>
     <style>
-        /*body {
-            background-image: url('https://atlassianblog.wpengine.com/wp-content/uploads/2022/01/2240x1090-1-1560x760.jpg');
-            background-attachment: fixed;
-            background-position: center;
-            background-repeat: no-repeat;
-            background-size: cover;
-            filter: blur(10px);
-        }*/
-
         body::after {
             content: "";
-                background: url('https://atlassianblog.wpengine.com/wp-content/uploads/2022/01/2240x1090-1-1560x760.jpg');
+            background: url('https://atlassianblog.wpengine.com/wp-content/uploads/2022/01/2240x1090-1-1560x760.jpg');
             position: fixed;
             top: 0;
             left: 0;
@@ -53,9 +48,9 @@
             color: #1a0dab;
         }
 
-        .table a:hover {
-            color: #721c24;
-        }
+            .table a:hover {
+                color: #721c24;
+            }
 
         .create-button {
             display: block;
@@ -70,10 +65,10 @@
             transition: all 0.3s ease 0s;
         }
 
-        .create-button:hover {
-            background-color: #2980b9;
-            text-decoration: none;
-        }
+            .create-button:hover {
+                background-color: #2980b9;
+                text-decoration: none;
+            }
 
         .edit-button {
             display: inline-block;
@@ -87,15 +82,16 @@
             transition: all 0.3s ease 0s;
         }
 
-        .edit-button:hover {
-            background-color: #666900;
-        }
+            .edit-button:hover {
+                background-color: #666900;
+            }
 
-        .details-button, .delete-button {
+        .details-button,
+        .delete-button {
             display: inline-block;
             padding: 10px 20px;
             margin: 10px;
-            background-color: #Ffffff;
+            background-color: #ffffff;
             color: #ffffff;
             text-align: center;
             border-radius: 5px;
@@ -103,55 +99,57 @@
             transition: all 0.3s ease 0s;
         }
 
-        .details-button:hover {
-            background-color: #777777;
-        }
+            .details-button:hover {
+                background-color: #777777;
+            }
 
         .delete-button {
             background-color: #e74c3c;
         }
 
-        .delete-button:hover {
-            background-color: #c0372b;
-        }
+            .delete-button:hover {
+                background-color: #c0372b;
+            }
     </style>
 </head>
-@{
-    ViewData["Title"] = "User";
-}
+<body>
+    <h1>User</h1>
 
-<h1>User</h1>
+    <p>
+        <a asp-action="Create" class="create-button">Create New</a>
+    </p>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.UserName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Email)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.UserName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Email)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Edit", "Edit", new { id = item.UserId }, new { @class = "edit-button" })
+                        @Html.ActionLink("Details", "Details", new { id = item.UserId }, new { @class = "details-button" })
+                        @Html.ActionLink("Delete", "Delete", new { id = item.UserId }, new { @class = "delete-button" })
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
 
-<p>
-    <a asp-action="Create" class="create-button">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.UserName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Email)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.UserName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Email)
-            </td>
-            <td>
-                    @Html.ActionLink("Edit", "Edit", new { id=item.UserId  }, new {@class = "edit-button"})
-                    @Html.ActionLink("Details", "Details", new { id = item.UserId }, new { @class = "details-button" })
-                    @Html.ActionLink("Delete", "Delete", new { id = item.UserId }, new { @class = "delete-button" })
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
