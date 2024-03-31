@@ -1,0 +1,47 @@
+﻿@model IEnumerable<CourseworkDB.Data.Models.AdType>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.TypeId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TypeName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TypeDesc)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.TypeId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TypeName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TypeDesc)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id=item.TypeId }) |
+                    @Html.ActionLink("Details", "Details", new { id = item.TypeId }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.TypeId })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

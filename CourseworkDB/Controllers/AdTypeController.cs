@@ -58,7 +58,7 @@ public class AdTypeController : Controller
             }
             var adType = await _adTyperepos.GetAdTypeAsync(AdTypeId);
             if (!ModelState.IsValid) return BadRequest(adType);
-            //DoubleCheck If exists
+
             if (adType == null)
             {
                 return NotFound(new

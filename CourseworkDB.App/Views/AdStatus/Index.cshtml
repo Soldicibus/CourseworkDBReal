@@ -1,0 +1,47 @@
+﻿@model IEnumerable<CourseworkDB.Data.Models.AdStatus>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.StatusId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StatusName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StatusDesc)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.StatusId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StatusName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StatusDesc)
+            </td>
+            <td>
+                    @Html.ActionLink("Edit", "Edit", new { id=item.StatusId }) |
+                    @Html.ActionLink("Details", "Details", new { id=item.StatusId }) |
+                    @Html.ActionLink("Delete", "Delete", new { id=item.StatusId })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

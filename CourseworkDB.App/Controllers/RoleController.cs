@@ -1,0 +1,126 @@
+﻿using CourseworkDB.Data.Models;
+using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+
+namespace CourseworkDB.App.Controllers;
+
+public class RoleController : Controller
+{
+    private readonly HttpClient _client;
+    private readonly Uri baseAddress = new Uri("https://localhost:7098/api");
+
+    public RoleController()
+    {
+        _client = new HttpClient();
+        _client.BaseAddress = baseAddress;
+    }
+
+    [HttpGet]
+    public IActionResult Index()
+    {
+        List<Role> roleList = new List<Role>();
+        HttpResponseMessage response = _client.GetAsync(_client.BaseAddress + "/Role/GetRoles").Result;
+        if (response.IsSuccessStatusCode)
+        {
+            string data = response.Content.ReadAsStringAsync().Result;
+            roleList = JsonConvert.DeserializeObject<List<Role>>(data);
+        }
+        return View(roleList);
+    }
+
+    [HttpGet]
+    public IActionResult Edit(int id)
+    {
+        HttpResponseMessage response = _client.GetAsync(_client.BaseAddress + "/Role/GetRoleById/" + id).Result;
+        if (response.IsSuccessStatusCode)
+        {
+            string data = response.Content.ReadAsStringAsync().Result;
+            Role role = JsonConvert.DeserializeObject<Role>(data);
+            return View(role);
+        }
+        else
+        {
+            return NotFound();
+        }
+    }
+
+    [HttpPost]
+    public IActionResult Edit(Role role)
+    {
+        HttpResponseMessage response = _client.PutAsJsonAsync(_client.BaseAddress + "/Role/UpdateRole", role).Result;
+        if (response.IsSuccessStatusCode)
+        {
+            return RedirectToAction("Index");
+        }
+        else
+        {
+            return View(role);
+        }
+    }
+
+    [HttpGet]
+    public IActionResult Details(int id)
+    {
+        HttpResponseMessage response = _client.GetAsync(_client.BaseAddress + "/Role/GetRoleById/" + id).Result;
+        if (response.IsSuccessStatusCode)
+        {
+            string data = response.Content.ReadAsStringAsync().Result;
+            Role role = JsonConvert.DeserializeObject<Role>(data);
+            return View(role);
+        }
+        else
+        {
+            return NotFound();
+        }
+    }
+
+    [HttpGet]
+    public IActionResult Delete(int id)
+    {
+        HttpResponseMessage response = _client.GetAsync(_client.BaseAddress + "/Role/GetRoleById/" + id).Result;
+        if (response.IsSuccessStatusCode)
+        {
+            string data = response.Content.ReadAsStringAsync().Result;
+            Role role = JsonConvert.DeserializeObject<Role>(data);
+            return View(role);
+        }
+        else
+        {
+            return NotFound();
+        }
+    }
+
+    [HttpPost]
+    public IActionResult Delete(Role role)
+    {
+        HttpResponseMessage response = _client.DeleteAsync(_client.BaseAddress + "/Role/DeleteRole/" + role.RoleId).Result;
+        if (response.IsSuccessStatusCode)
+        {
+            return RedirectToAction("Index");
+        }
+        else
+        {
+            return NotFound();
+        }
+    }
+
+    [HttpGet]
+    public IActionResult Create()
+    {
+        return View();
+    }
+
+    [HttpPost]
+    public IActionResult Create(Role role)
+    {
+        HttpResponseMessage response = _client.PostAsJsonAsync(_client.BaseAddress + "/Role/CreateRole", role).Result;
+        if (response.IsSuccessStatusCode)
+        {
+            return RedirectToAction("Index");
+        }
+        else
+        {
+            return View(role);
+        }
+    }
+}
