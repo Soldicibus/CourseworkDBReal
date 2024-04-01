@@ -13,11 +13,19 @@ public class UserRoleController : Controller
     private readonly IUserRoleRepository _userRolerepos;
     private readonly ILogger<UserRoleController> _logger;
     private readonly IMapper _mapper;
-    public UserRoleController(IUserRoleRepository userRoleRepository, ILogger<UserRoleController> logger, IMapper mapper)
+    private readonly DataContext _ctx;
+    public UserRoleController(IUserRoleRepository userRoleRepository, ILogger<UserRoleController> logger, IMapper mapper, DataContext ctx)
     {
         _userRolerepos = userRoleRepository;
         _logger = logger;
         _mapper = mapper;
+        _ctx = ctx;
+    }
+    [HttpGet]
+    public async Task<IActionResult> GetUserRole(int id, int id2)
+    {
+        var userRole = await _ctx.UserRoles.FindAsync(new object[] { id, id2 });
+        return Ok(userRole);
     }
     [HttpGet]
     public async Task<IActionResult> GetUserRoles()
@@ -53,10 +61,12 @@ public class UserRoleController : Controller
         }
     }
     [HttpDelete]
-    public async Task<IActionResult> DelUserRole(int userId, int roleId)
+    public async Task<IActionResult> DeleteUserRole(UserRoleDto userrole)
     {
         try
         {
+            var userId = userrole.UserId;
+            var roleId = userrole.RoleId;
             await _userRolerepos.DelUserRoleAsync(userId, roleId);
             return NoContent();
         }
