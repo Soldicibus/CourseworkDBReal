@@ -47,7 +47,7 @@ public class AdStatusController : Controller
     [HttpPost]
     public IActionResult Edit(AdStatus adStatus)
     {
-        HttpResponseMessage response = _client.PutAsJsonAsync(_client.BaseAddress + "/AdStatus/UpdateAdStatus", adStatus).Result;
+        HttpResponseMessage response = _client.PutAsJsonAsync(_client.BaseAddress + "/AdStatus/UpdateAdStatuse", adStatus).Result;
         if (response.IsSuccessStatusCode)
         {
             return RedirectToAction("Index");
@@ -113,7 +113,7 @@ public class AdStatusController : Controller
     [HttpPost]
     public IActionResult Create(AdStatus adStatus)
     {
-        HttpResponseMessage response = _client.PostAsJsonAsync(_client.BaseAddress + "/AdStatus/AddAdStatus", adStatus).Result;
+        HttpResponseMessage response = _client.PostAsJsonAsync(_client.BaseAddress + "/AdStatus/AddAdStatuse", adStatus).Result;
         if (response.IsSuccessStatusCode)
         {
             return RedirectToAction("Index");

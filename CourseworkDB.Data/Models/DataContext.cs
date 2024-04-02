@@ -13,7 +13,6 @@ public class DataContext : DbContext
     }
     public DbSet<User> Users { get; set; }
     public DbSet<Role> Roles { get; set; }
-    public DbSet<UserRole> UserRoles { get; set; }
     public DbSet<Company> Companies { get; set; }
     public DbSet<Advertiser> Advertisers { get; set; }
     public DbSet<Publisher> Publishers { get; set; }
@@ -27,18 +26,5 @@ public class DataContext : DbContext
     {
         optionsBuilder.UseLoggerFactory(LoggerFactory.Create(builder => builder.AddConsole()));
         optionsBuilder.UseMySQL(_connectionString);
-    }
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {
-        modelBuilder.Entity<UserRole>()
-            .HasKey(ur => new { ur.UserId, ur.RoleId });
-        modelBuilder.Entity<UserRole>()
-            .HasOne(u => u.User)
-            .WithMany(ur => ur.UserRoles)
-            .HasForeignKey(u => u.UserId);
-        modelBuilder.Entity<UserRole>()
-            .HasOne(r => r.Role)
-            .WithMany(ur => ur.UserRoles)
-            .HasForeignKey(r => r.RoleId);
     }
 }

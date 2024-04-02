@@ -154,44 +154,6 @@ public class UserController : Controller
             });
         }
     }
-    [HttpGet("{UserId}/roles")]
-    [ProducesResponseType(200, Type = typeof(IEnumerable<Role>))]
-    [ProducesResponseType(500)]
-    [ProducesResponseType(404)]
-    public async Task<IActionResult> GetRolesByUserId(int UserId)
-    {
-        try
-        {
-            if (!_userrepos.UserExists(UserId))
-            {
-                return NotFound(new
-                {
-                    statusCode = 404,
-                    message = "Record doesn't exist (error UserId doesn't exitst)"
-                });
-            }
-            var roles = _mapper.Map<List<RoleDto>>(await _userrepos.GetRolesOfAUserAsync(UserId));
-            if (!ModelState.IsValid) return BadRequest(roles);
-            if (roles == null)
-            {
-                return NotFound(new
-                {
-                    statusCode = 404,
-                    message = "Record not found"
-                });
-            }
-            else return Ok(roles);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex.Message);
-            return StatusCode(StatusCodes.Status500InternalServerError, new
-            {
-                statusCode = 500,
-                message = ex.Message
-            });
-        }
-    }
     [HttpPost]
     public async Task<IActionResult> AddUser(UserDto_w_pass userDto)
     {

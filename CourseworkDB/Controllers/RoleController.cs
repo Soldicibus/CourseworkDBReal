@@ -113,44 +113,6 @@ public class RoleController : Controller
             });
         }
     }
-    [HttpGet("{RoleId}/users")]
-    [ProducesResponseType(200, Type = typeof(IEnumerable<User>))]
-    [ProducesResponseType(500)]
-    [ProducesResponseType(404)]
-    public async Task<IActionResult> GetUsersByRoleId(int RoleId)
-    {
-        try
-        {
-            if (!_rolerepos.RoleExists(RoleId))
-            {
-                return NotFound(new
-                {
-                    statusCode = 404,
-                    message = "Record doesn't exist (error RoleId doesn't exist)"
-                });
-            }
-            var users = _mapper.Map<List<UserDto_wo_Id>>(await _rolerepos.GetUsersWithRoleAsync(RoleId));
-            if (!ModelState.IsValid) return BadRequest(users);
-            if (users == null)
-            {
-                return NotFound(new
-                {
-                    statusCode = 404,
-                    message = "Record not found"
-                });
-            }
-            else return Ok(users);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex.Message);
-            return StatusCode(StatusCodes.Status500InternalServerError, new
-            {
-                statusCode = 500,
-                message = ex.Message
-            });
-        }
-    }
     [HttpPost]
     public async Task<IActionResult> AddRole(RoleDto roleDto)
     {
@@ -225,6 +187,42 @@ public class RoleController : Controller
             await _rolerepos.DeleteRoleAsync(RoleId);
             return NoContent();
 
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex.Message);
+            return StatusCode(StatusCodes.Status500InternalServerError, new
+            {
+                statusCode = 500,
+                message = ex.Message
+            });
+        }
+    }
+    [HttpPost]
+    public async Task<IActionResult> AddUserToRole(int roleId, int userId)
+    {
+        try
+        {
+            if (!_rolerepos.RoleExists(roleId))
+            {
+                return NotFound(new
+                {
+                    statusCode = 404,
+                    message = "Record doesn't exist"
+                });
+            }
+            var role = await _rolerepos.GetRoleAsync(roleId);
+            if (role == null)
+            {
+                return NotFound(new
+                {
+                    statusCode = 404,
+                    message = "Record not found"
+                });
+            }
+            var addedUser = await _rolerepos.AddUserToRoleAsync(roleId, userId);
+            var outp = _mapper.Map<UserDto>(addedUser);
+            return CreatedAtAction(nameof(AddUserToRole), outp);
         }
         catch (Exception ex)
         {

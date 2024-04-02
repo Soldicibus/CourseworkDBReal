@@ -1,10 +1,10 @@
 ﻿@model IEnumerable<CourseworkDB.Data.Models.Role>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Role";
 }
 
-<h1>Index</h1>
+<h1>Role</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -22,20 +22,27 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.RoleId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.RoleName)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { id=item.RoleId }) |
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RoleId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RoleName)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.RoleId }) |
                     @Html.ActionLink("Details", "Details", new { id = item.RoleId }) |
-                    @Html.ActionLink("Delete", "Delete", new { id = item.RoleId })
-            </td>
-        </tr>
-}
+                    @Html.ActionLink("Delete", "Delete", new { id = item.RoleId }) |
+                    <form asp-action="AddUser" asp-controller="Role" method="post">
+                        <input type="hidden" name="roleId" value="@item.RoleId" />
+                        <label>User Id: </label>
+                        <input class="form-control" type="text" name="userId" />
+                        <button type="submit" class="back-button">Add User</button>
+                    </form>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

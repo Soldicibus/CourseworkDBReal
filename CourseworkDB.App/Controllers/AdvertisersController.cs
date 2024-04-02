@@ -32,11 +32,11 @@ public class AdvertiserController : Controller
     [HttpGet]
     public IActionResult Edit(int id)
     {
-        HttpResponseMessage response = _client.GetAsync(_client.BaseAddress + "/Advertisers/GetAdvertiserById/" + id).Result;
+        HttpResponseMessage response = _client.GetAsync(_client.BaseAddress + "/Advertisers/GetAdvertiserByIdCreation/" + id).Result;
         if (response.IsSuccessStatusCode)
         {
             string data = response.Content.ReadAsStringAsync().Result;
-            Advertiser advertiser = JsonConvert.DeserializeObject<Advertiser>(data);
+            AdvertiserCreationDto advertiser = JsonConvert.DeserializeObject<AdvertiserCreationDto>(data);
             return View(advertiser);
         }
         else

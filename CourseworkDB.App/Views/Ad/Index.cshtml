@@ -1,10 +1,10 @@
 ﻿@model IEnumerable<CourseworkDB.Data.Models.Ad>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Ad";
 }
 
-<h1>Index</h1>
+<h1>Ad</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -43,9 +43,9 @@
                 @Html.DisplayFor(modelItem => item.AdUrl)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                @Html.ActionLink("Edit", "Edit", new { id=item.AdId }) |
+                @Html.ActionLink("Details", "Details", new { id=item.AdId }) |
+                @Html.ActionLink("Delete", "Delete", new { id=item.AdId })
             </td>
         </tr>
 }

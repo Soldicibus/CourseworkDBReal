@@ -84,6 +84,45 @@ public class AdvertisersController : Controller
             });
         }
     }
+    [HttpGet("{AdvertiserId}")]
+    [ProducesResponseType(200, Type = typeof(IEnumerable<Advertiser>))]
+    [ProducesResponseType(500)]
+    [ProducesResponseType(400)]
+    public async Task<IActionResult> GetAdvertiserByIdCreation(int AdvertiserId)
+    {
+        try
+        {
+            if (!_advertiserrepos.AdvertiserExist(AdvertiserId))
+            {
+                return NotFound(new
+                {
+                    statusCode = 404,
+                    message = "Record doesn't exist"
+                });
+            }
+            var advertiser = await _advertiserrepos.GetAdvertiserByIdAsync(AdvertiserId);
+            var advertiserDto = _mapper.Map<AdvertiserCreationDto>(advertiser);
+            if (!ModelState.IsValid) return BadRequest(advertiserDto);
+            if (advertiserDto == null)
+            {
+                return NotFound(new
+                {
+                    statusCode = 404,
+                    message = "Record not found"
+                });
+            }
+            else return Ok(advertiserDto);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex.Message);
+            return StatusCode(StatusCodes.Status500InternalServerError, new
+            {
+                statusCode = 500,
+                message = ex.Message
+            });
+        }
+    }
     [HttpGet("{UserId}/advertisers")]
     [ProducesResponseType(200, Type = typeof(IEnumerable<Advertiser>))]
     [ProducesResponseType(500)]

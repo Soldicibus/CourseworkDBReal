@@ -16,5 +16,5 @@ public class User
     public string Email { get; set; }
     [Required]
     public string Password { get; set; }
-    public ICollection<UserRole>? UserRoles { get; set; } = new List<UserRole>();
+    public Role? Role { get; set; }
 }

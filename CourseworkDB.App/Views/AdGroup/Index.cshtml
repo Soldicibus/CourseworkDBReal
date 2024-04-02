@@ -1,10 +1,10 @@
 ﻿@model IEnumerable<CourseworkDB.Data.Models.AdGroup>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "AdGroup";
 }
 
-<h1>Index</h1>
+<h1>AdGroup</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -49,9 +49,9 @@
                 @Html.DisplayFor(modelItem => item.BidAmount)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                @Html.ActionLink("Edit", "Edit", new { id=item.GroupId }) |
+                @Html.ActionLink("Details", "Details", new { id=item.GroupId }) |
+                @Html.ActionLink("Delete", "Delete", new { id=item.GroupId })
             </td>
         </tr>
 }

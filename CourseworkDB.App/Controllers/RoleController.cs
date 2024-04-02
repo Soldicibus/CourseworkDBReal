@@ -1,6 +1,8 @@
-﻿using CourseworkDB.Data.Models;
+﻿using CourseworkDB.Data.Dto;
+using CourseworkDB.Data.Models;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.Data;
 
 namespace CourseworkDB.App.Controllers;
 
@@ -113,7 +115,7 @@ public class RoleController : Controller
     [HttpPost]
     public IActionResult Create(Role role)
     {
-        HttpResponseMessage response = _client.PostAsJsonAsync(_client.BaseAddress + "/Role/CreateRole", role).Result;
+        HttpResponseMessage response = _client.PostAsJsonAsync(_client.BaseAddress + "/Role/AddRole", role).Result;
         if (response.IsSuccessStatusCode)
         {
             return RedirectToAction("Index");
@@ -121,6 +123,30 @@ public class RoleController : Controller
         else
         {
             return View(role);
+        }
+    }
+    [HttpGet]
+    public IActionResult AddUser()
+    {
+        return View();
+    }
+
+    [HttpPost]
+    public IActionResult AddUser(int userId, int roleId)
+    {
+        string url = $"{_client.BaseAddress}/Role/AddUserToRole?roleId={roleId}&userId={userId}";
+
+        HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, url);
+
+        HttpResponseMessage response = _client.SendAsync(request).Result;
+
+        if (response.IsSuccessStatusCode)
+        {
+            return RedirectToAction("Index");
+        }
+        else
+        {
+            return NotFound();
         }
     }
 }

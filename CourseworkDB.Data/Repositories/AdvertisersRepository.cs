@@ -13,7 +13,7 @@ public class AdvertisersRepository : IAdvertisersRepository
     }
     public bool AdvertiserExist(int AdvertiserId)
     {
-        return _ctx.Advertisers.Any(r => r.AdvertiserId == AdvertiserId);
+        return _ctx.Advertisers.Include(a => a.User).Any(r => r.AdvertiserId == AdvertiserId);
     }
     public async Task<IEnumerable<Advertiser>> GetAllAdvertisersAsync()
     {

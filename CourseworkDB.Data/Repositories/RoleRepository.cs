@@ -26,10 +26,6 @@ public class RoleRepository : IRoleRepository
     {
         return await _ctx.Roles.AsNoTracking().FirstOrDefaultAsync(r => r.RoleName == rolename);
     }
-    public async Task<ICollection<User>> GetUsersWithRoleAsync(int id)
-    {
-        return await _ctx.UserRoles.Where(a => a.RoleId == id).Select(a => a.User).ToListAsync();
-    }
     public async Task<Role> CreateRoleAsync(Role role)
     {
         _ctx.Roles.Add(role);
@@ -52,5 +48,17 @@ public class RoleRepository : IRoleRepository
 
         _ctx.Roles.Remove(role);
         await _ctx.SaveChangesAsync();
+    }
+    public async Task<User> AddUserToRoleAsync(int roleId, int userId)
+    {
+        var user = await _ctx.Users.FindAsync(userId);
+        var role = await _ctx.Roles.FindAsync(roleId);
+        if (user == null || role == null)
+        {
+            return null;
+        }
+        role.Users.Add(user);
+        await _ctx.SaveChangesAsync();
+        return user;
     }
 }

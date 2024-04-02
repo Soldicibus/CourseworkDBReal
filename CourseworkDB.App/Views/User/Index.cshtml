@@ -18,7 +18,7 @@
     <style>
         body::after {
             content: "";
-            background: url('https://atlassianblog.wpengine.com/wp-content/uploads/2022/01/2240x1090-1-1560x760.jpg');
+            background: url('https://img.freepik.com/free-vector/abstract-blue-circle-black-background-technology_1142-12714.jpg');
             position: fixed;
             top: 0;
             left: 0;
@@ -113,7 +113,7 @@
     </style>
 </head>
 <body>
-    <h1>User</h1>
+    <h1 style="color: white;">User</h1>
 
     <p>
         <a asp-action="Create" class="create-button">Create New</a>
@@ -127,6 +127,9 @@
                 <th>
                     @Html.DisplayNameFor(model => model.Email)
                 </th>
+                <th>
+                    Role
+                </th>
                 <th></th>
             </tr>
         </thead>
@@ -136,15 +139,25 @@
                 <tr>
                     <td>
                         @Html.DisplayFor(modelItem => item.UserName)
+                        @if (item.UserName == "CHV")
+                        {
+                            <img src="https://i.ibb.co/zGrkMq9/CHV26.jpg" width="300" height="300" alt="Image for CHV">
+                        }
+                        @if (item.UserName == "Barry Wood")
+                        {
+                            <img src="https://i.ibb.co/y5KDs9S/Barry-wood2.png" width="300" height="300" alt="Image for Barry Wood">
+                        }
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Email)
                     </td>
                     <td>
+                        @Html.DisplayFor(modelItem => item.Role.RoleName)
+                    </td>
+                    <td>
                         @Html.ActionLink("Edit", "Edit", new { id = item.UserId }, new { @class = "edit-button" })
                         @Html.ActionLink("Details", "Details", new { id = item.UserId }, new { @class = "details-button" })
                         @Html.ActionLink("Delete", "Delete", new { id = item.UserId }, new { @class = "delete-button" })
-                        @Html.ActionLink("Create User Role", "AddUserRole", "UserRole", null, new { @class = "details-button" })
                     </td>
                 </tr>
             }

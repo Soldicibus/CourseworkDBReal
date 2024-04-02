@@ -38,7 +38,7 @@ public class UserRepository : IUserRepository
     }
     public async Task<ICollection<User>> GetUsersAsync()
     {
-        return await _ctx.Users.OrderBy(u => u.UserId).ToListAsync();
+        return await _ctx.Users.Include(r => r.Role).OrderBy(u => u.UserId).ToListAsync();
     }
     public async Task<User> GetUserByIdAsync(int id)
     {
@@ -51,10 +51,6 @@ public class UserRepository : IUserRepository
     public async Task<User> GetUserByEmailAsync(string email)
     {
         return await _ctx.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Email == email);
-    }
-    public async Task<ICollection<Role>> GetRolesOfAUserAsync(int id)
-    {
-        return await _ctx.UserRoles.Where(a => a.UserId == id).Select(a => a.Role).ToListAsync();
     }
     public async Task<User> CreateUserAsync(User user)
     {

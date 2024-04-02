@@ -1,29 +1,49 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
-}
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Language Switcher</title>
+</head>
+<body>
+    <center>
+        <h1 id="welcomeMessage">Welcome to the ad agency control panel (website)</h1>
+        <h4 id="secondMessage">Click on the tables above (in the header) to select a table</h4>
+    </center>
+    <label for="languageSelect" id="choose">Select Language:</label>
+    <select id="languageSelect" onchange="changeLanguage()">
+        <option value="en">English</option>
+        <option value="ua">Українська</option>
+    </select>
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-    <p>
-        <a href="/User/Index">Go to User</a>
-    </p>
-    <p>
-        <a href="/Role/Index">Go to Role</a>
-    </p>
-    <p>
-        <a href="/Ad/Index">Go to Ad</a>
-    </p>
-    <p>
-        <a href="/AdType/Index">Go to AdType</a>
-    </p>
-    <p>
-        <a href="/AdStatus/Index">Go to AdStatus</a>
-    </p>
-    <p>
-        <a href="/Advertiser/Index">Go to Advertiser</a>
-    </p>
-    <p>
-        <a href="/Publisher/Index">Go to Publisher</a>
-    </p>
-</div>
+    <script>
+        function changeLanguage() {
+            var languageSelect = document.getElementById('languageSelect');
+            var selectedLanguage = languageSelect.value;
+
+            var translations = {
+                'en': {
+                    'welcomeMessage': 'Welcome to the ad agency control panel (website)',
+                    'secondMessage': 'Click on the tables above (in the header) to select a table',
+                    'choose': 'Select Language:'
+                    
+                },
+                'ua': {
+                    'welcomeMessage': 'Вітаємо вас у панелі керування (вебсайт) рекламного агенства',
+                    'secondMessage': 'Клацніть на таблиці вище (у хедері зверху), щоб обрати таблицю',
+                    'choose': 'Оберіть мову:'
+                }
+            };
+
+            var selectedTranslations = translations[selectedLanguage];
+            var welcomeMessage = selectedTranslations['welcomeMessage'];
+            var secondMessage = selectedTranslations['secondMessage'];
+            var choose = selectedTranslations['choose'];
+
+            document.getElementById('welcomeMessage').textContent = welcomeMessage;
+            document.getElementById('secondMessage').textContent = secondMessage;
+            document.getElementById('choose').textContent = choose;
+        }
+    </script>
+</body>
+</html>

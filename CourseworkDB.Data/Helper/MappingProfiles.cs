@@ -17,6 +17,5 @@ public class MappingProfiles : Profile
         CreateMap<Publisher, PublisherDto>(); CreateMap<PublisherDto, Publisher>(); CreateMap<Publisher, PublisherCreationDto>(); CreateMap<PublisherCreationDto, Publisher>();
         CreateMap<Ad, AdDto>(); CreateMap<AdDto, Ad>(); CreateMap<Ad, AdCreationDto>(); CreateMap<AdCreationDto, Ad>();
         CreateMap<Payment, PaymentDto>(); CreateMap<PaymentDto, Payment>(); CreateMap<Payment, PaymentCreationDto>(); CreateMap<PaymentCreationDto, Payment>();
-        CreateMap<UserRole, UserRoleDto>();
     }
 }

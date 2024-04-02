@@ -1,4 +1,5 @@
 ﻿using CourseworkDB.Data.Models;
+using CourseworkDB.Data.Dto;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
@@ -42,7 +43,7 @@ public class UserController : Controller
     }
 
     [HttpPost]
-    public IActionResult Edit(User user)
+    public IActionResult Edit(UserDto_w_pass user)
     {
         HttpResponseMessage response = _client.PutAsJsonAsync(_client.BaseAddress + "/User/UpdateUser", user).Result;
         if (response.IsSuccessStatusCode)
@@ -107,9 +108,10 @@ public class UserController : Controller
     }
 
     [HttpPost]
-    public IActionResult Create(User user)
+    public IActionResult Create(UserDto_w_pass user)
     {
-        HttpResponseMessage response = _client.PostAsJsonAsync(_client.BaseAddress + "/User/CreateUser", user).Result;
+        string url = "https://localhost:7098/api/User/AddUser";
+        HttpResponseMessage response = _client.PostAsJsonAsync(url, user).Result;
         if (response.IsSuccessStatusCode)
         {
             return RedirectToAction("Index");
