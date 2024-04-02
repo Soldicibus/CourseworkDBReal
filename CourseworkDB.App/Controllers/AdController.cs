@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Json;
+using CourseworkDB.Data.Dto;
 using CourseworkDB.Data.Models;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -39,7 +40,7 @@ public class AdController : Controller
         if (response.IsSuccessStatusCode)
         {
             string data = response.Content.ReadAsStringAsync().Result;
-            Ad ad = JsonConvert.DeserializeObject<Ad>(data);
+            AdCreationDto ad = JsonConvert.DeserializeObject<AdCreationDto>(data);
             return View(ad);
         }
         else
@@ -49,7 +50,7 @@ public class AdController : Controller
     }
 
     [HttpPost]
-    public IActionResult Edit(Ad ad)
+    public IActionResult Edit(AdCreationDto ad)
     {
         HttpResponseMessage response = _client.PutAsJsonAsync($"{_client.BaseAddress}/Ad/UpdateAd", ad).Result;
         if (response.IsSuccessStatusCode)
@@ -115,7 +116,7 @@ public class AdController : Controller
     }
 
     [HttpPost]
-    public IActionResult Create(Ad ad)
+    public IActionResult Create(AdCreationDto ad)
     {
         HttpResponseMessage response = _client.PostAsJsonAsync($"{_client.BaseAddress}/Ad/AddAd", ad).Result;
         if (response.IsSuccessStatusCode)

@@ -36,7 +36,7 @@ public class PaymentController : Controller
         if (response.IsSuccessStatusCode)
         {
             string data = response.Content.ReadAsStringAsync().Result;
-            Payment payment = JsonConvert.DeserializeObject<Payment>(data);
+            PaymentCreationDto payment = JsonConvert.DeserializeObject<PaymentCreationDto>(data);
             return View(payment);
         }
         else

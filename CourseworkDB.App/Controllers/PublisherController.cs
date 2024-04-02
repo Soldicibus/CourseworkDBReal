@@ -36,7 +36,7 @@ public class PublisherController : Controller
         if (response.IsSuccessStatusCode)
         {
             string data = response.Content.ReadAsStringAsync().Result;
-            Publisher publisher = JsonConvert.DeserializeObject<Publisher>(data);
+            PublisherCreationDto publisher = JsonConvert.DeserializeObject<PublisherCreationDto>(data);
             return View(publisher);
         }
         else

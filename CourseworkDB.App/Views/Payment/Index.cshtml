@@ -21,6 +21,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.PaymentDate)
             </th>
+            <th>
+                Ad Group
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -35,6 +38,9 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.PaymentDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AdGroup.GroupName)
             </td>
             <td>
                 @Html.ActionLink("Edit", "Edit", new { id=item.PaymentId  }) |

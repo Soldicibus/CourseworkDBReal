@@ -17,7 +17,7 @@ public class AdRepository : IAdRepository
     }
     public async Task<ICollection<Ad>> GetAdsAsync()
     {
-        return await _ctx.Ads.OrderBy(r => r.AdId).ToListAsync();
+        return await _ctx.Ads.Include(a => a.AdCampaign).Include(a => a.AdType).OrderBy(r => r.AdId).ToListAsync();
     }
     public async Task<Ad> GetAdsByIdAsync(int Id)
     {
@@ -65,6 +65,9 @@ public class AdRepository : IAdRepository
         }
         existingAd.AdType = type;
         existingAd.AdCampaign = campaign;
+        existingAd.AdDescription = ad.AdDescription;
+        existingAd.AdTitle = ad.AdTitle;
+        existingAd.AdUrl = ad.AdUrl;
 
         _ctx.Ads.Update(existingAd);
         await _ctx.SaveChangesAsync();

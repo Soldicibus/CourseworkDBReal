@@ -18,7 +18,7 @@ public class PaymentRepository : IPaymentRepository
     }
     public async Task<ICollection<Payment>> GetPaymentsAsync()
     {
-        return await _ctx.Payments.OrderBy(p => p.PaymentId).ToListAsync();
+        return await _ctx.Payments.Include(ag => ag.AdGroup).OrderBy(p => p.PaymentId).ToListAsync();
     }
     public async Task<Payment> GetPaymentByIdAsync(int Id)
     {
