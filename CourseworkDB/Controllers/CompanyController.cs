@@ -264,7 +264,7 @@ public class CompanyController : Controller
             });
         }
     }
-    [HttpPut]
+    [HttpPost]
     public async Task<IActionResult> AddAdvertiserToCompany(int companyId, int advertiserId)
     {
         try
@@ -287,7 +287,8 @@ public class CompanyController : Controller
                 });
             }
             var addedAdvertiser = await _companyrepos.AddAdvertiserToCompanyAsync(companyId, advertiserId);
-            return CreatedAtAction(nameof(AddCompany), addedAdvertiser);
+            var outp = _mapper.Map<AdvertiserDto>(addedAdvertiser);
+            return CreatedAtAction(nameof(AddCompany), outp);
         }
         catch (Exception ex)
         {

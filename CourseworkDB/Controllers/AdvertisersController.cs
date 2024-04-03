@@ -30,7 +30,7 @@ public class AdvertisersController : Controller
     {
         try
         {
-            var advertisers = _mapper.Map<List<AdvertiserDto>>(await _advertiserrepos.GetAllAdvertisersAsync());
+            var advertisers = await _advertiserrepos.GetAllAdvertisersAsync();
 
             if (!ModelState.IsValid) return BadRequest(advertisers);
             else return Ok(advertisers);

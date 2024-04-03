@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using CourseworkDB.Data.Dto;
 using CourseworkDB.Data.Models;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -38,7 +39,7 @@ public class CompanyController : Controller
         if (response.IsSuccessStatusCode)
         {
             string data = response.Content.ReadAsStringAsync().Result;
-            Company company = JsonConvert.DeserializeObject<Company>(data);
+            CompanyCreationDto company = JsonConvert.DeserializeObject<CompanyCreationDto>(data);
             return View(company);
         }
         else
@@ -48,7 +49,7 @@ public class CompanyController : Controller
     }
 
     [HttpPost]
-    public IActionResult Edit(Company company)
+    public IActionResult Edit(CompanyCreationDto company)
     {
         HttpResponseMessage response = _client.PutAsJsonAsync($"{_client.BaseAddress}/Company/UpdateCompany", company).Result;
         if (response.IsSuccessStatusCode)
@@ -114,7 +115,7 @@ public class CompanyController : Controller
     }
 
     [HttpPost]
-    public IActionResult Create(Company company)
+    public IActionResult Create(CompanyCreationDto company)
     {
         HttpResponseMessage response = _client.PostAsJsonAsync($"{_client.BaseAddress}/Company/AddCompany", company).Result;
         if (response.IsSuccessStatusCode)
@@ -124,6 +125,29 @@ public class CompanyController : Controller
         else
         {
             return View(company);
+        }
+    }
+    [HttpGet]
+    public IActionResult AddAdvertiser()
+    {
+        return View();
+    }
+    [HttpPost]
+    public IActionResult AddAdvertiser(int advertiserId, int companyId) 
+    {
+        string url = $"{_client.BaseAddress}/Company/AddAdvertiserToCompany?companyId={companyId}&advertiserId={advertiserId}";
+
+        HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, url);
+
+        HttpResponseMessage response = _client.SendAsync(request).Result;
+
+        if (response.IsSuccessStatusCode)
+        {
+            return RedirectToAction("Index");
+        }
+        else
+        {
+            return NotFound();
         }
     }
 }

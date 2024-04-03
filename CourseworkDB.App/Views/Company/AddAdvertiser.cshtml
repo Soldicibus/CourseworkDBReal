@@ -1,0 +1,38 @@
+﻿@model CourseworkDB.Data.Models.Advertiser
+
+@{
+    ViewData["Title"] = "AddAdvertiser";
+}
+
+<h1>AddAdvertiser</h1>
+
+<h4>CompanyCreationDto</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="AddAdvertiser">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Company.CompanyId" class="control-label"></label>
+                <input asp-for="Company.CompanyId" class="form-control" />
+                <span asp-validation-for="Company.CompanyId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AdvertiserId" class="control-label"></label>
+                <input asp-for="AdvertiserId" class="form-control" />
+                <span asp-validation-for="AdvertiserId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

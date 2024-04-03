@@ -4,6 +4,57 @@
     ViewData["Title"] = "Create";
 }
 
+<style>
+    body::after {
+        content: "";
+        background: url('https://i.ibb.co/Qr5NKQ2/good-enough.png') center center/cover no-repeat;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: -1;
+        background-size: cover;
+        background-position: center calc(var(--scroll-position));
+        filter: blur(5px);
+    }
+
+    h1 {
+        color: #333;
+        margin-bottom: 20px;
+    }
+
+    .container {
+        max-width: 800px;
+        margin: 20px auto;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h4 {
+        color: #555;
+    }
+
+    .back-button {
+        display: inline-block;
+        margin-top: 20px;
+        color: #fff;
+        background-color: #007bff;
+        border: 1px solid #007bff;
+        padding: .375rem .75rem;
+        border-radius: .25rem;
+        text-decoration: none;
+    }
+
+        .back-button:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
+            text-decoration: none;
+        }
+</style>
+
 <h1>Create</h1>
 
 <h4>AdCampaignCreationDto</h4>
@@ -12,11 +63,6 @@
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="CampaignId" class="control-label"></label>
-                <input asp-for="CampaignId" class="form-control" />
-                <span asp-validation-for="CampaignId" class="text-danger"></span>
-            </div>
             <div class="form-group">
                 <label asp-for="CampaignName" class="control-label"></label>
                 <input asp-for="CampaignName" class="form-control" />
@@ -65,7 +111,7 @@
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index" class="back-button">Back to List</a>
 </div>
 
 @section Scripts {

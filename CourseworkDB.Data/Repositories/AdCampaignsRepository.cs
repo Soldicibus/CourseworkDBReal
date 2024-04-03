@@ -15,13 +15,31 @@ public class AdCampaignsRepository : IAdCampaignsRepository
     {
         return _ctx.AdCampaigns.Any(u => u.CampaignId == CampaignId);
     }
-    public async Task<ICollection<AdCampaign>> GetAdCampaignsAsync()
+    public async Task<IEnumerable<AdCampaign>> GetAdCampaignsAsync()
     {
-        return await _ctx.AdCampaigns.OrderBy(r => r.CampaignId).ToListAsync();
+        var campaigns = await _ctx.AdCampaigns
+            .Include(a => a.AdGroup)
+            .Include(a => a.AdStatus)
+            .Include(a => a.Company)
+            .ToListAsync();
+
+        var result = campaigns.Select(a => new AdCampaign
+        {
+            CampaignId = a.CampaignId,
+            CampaignName = a.CampaignName,
+            StartDate = a.StartDate,
+            EndDate = a.EndDate,
+            TotalBudget = a.TotalBudget,
+            AdStatus = new AdStatus { StatusName = a.AdStatus.StatusName },
+            Company = new Company { CompanyName = a.Company.CompanyName },
+            AdGroup = a.AdGroup != null ? new AdGroup { GroupName = a.AdGroup.GroupName } : null,
+        });
+
+        return result;
     }
     public async Task<AdCampaign> GetAdCampaignAsync(int id)
     {
-        return await _ctx.AdCampaigns.Include(ac => ac.Company).Include(ac => ac.AdStatus)
+        return await _ctx.AdCampaigns.Include(ac => ac.Company).Include(ac => ac.AdStatus).Include(ac => ac.AdGroup)
             .FirstOrDefaultAsync(r => r.CampaignId == id);
     }
     public async Task<AdCampaign> GetAdCampaignByNameAsync(string AdCampaignName)
@@ -110,6 +128,12 @@ public class AdCampaignsRepository : IAdCampaignsRepository
         if (adCampaign == null)
         {
             return;
+        }
+
+        var adsWithCampaigns = await _ctx.Ads.Where(a => a.AdCampaign.CampaignId == id).ToListAsync();
+        foreach (var ad in adsWithCampaigns)
+        {
+            ad.AdCampaign = null;
         }
 
         _ctx.AdCampaigns.Remove(adCampaign);

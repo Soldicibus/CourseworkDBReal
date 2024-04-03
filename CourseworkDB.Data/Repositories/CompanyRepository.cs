@@ -37,7 +37,12 @@ public class CompanyRepository : ICompanyRepository
     }
     public async Task<ICollection<Company>> GetCompaniesAsync()
     {
-        return await _ctx.Companies.OrderBy(r => r.CompanyId).ToListAsync();
+        return await _ctx.Companies
+        .Include(p => p.Publisher)
+            .ThenInclude(u => u.User)
+        .OrderBy(r => r.CompanyId)
+        .ToListAsync();
+
     }
     public async Task<Company> GetCompanyAsync(int id)
     {
@@ -82,6 +87,12 @@ public class CompanyRepository : ICompanyRepository
         if (company == null)
         {
             return;
+        }
+
+        var advertiserWithCompany = await _ctx.Advertisers.Where(a => a.Company.CompanyId == id).ToListAsync();
+        foreach (var advertiser in advertiserWithCompany)
+        {
+            advertiser.Company = null;
         }
 
         _ctx.Companies.Remove(company);

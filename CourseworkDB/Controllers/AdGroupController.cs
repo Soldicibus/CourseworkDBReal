@@ -264,7 +264,7 @@ public class AdGroupController : Controller
             });
         }
     }
-    [HttpPut]
+    [HttpPost]
     public async Task<IActionResult> AddAdCampaignToAdGroup(int adGroupId, int adCampaignId)
     {
         try

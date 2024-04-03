@@ -13,12 +13,25 @@ public class AdvertisersRepository : IAdvertisersRepository
     }
     public bool AdvertiserExist(int AdvertiserId)
     {
-        return _ctx.Advertisers.Include(a => a.User).Any(r => r.AdvertiserId == AdvertiserId);
+        return _ctx.Advertisers.Any(r => r.AdvertiserId == AdvertiserId);
     }
     public async Task<IEnumerable<Advertiser>> GetAllAdvertisersAsync()
     {
-        return await _ctx.Advertisers.Include(a => a.User).ToListAsync();
+        var advertisers = await _ctx.Advertisers
+            .Include(a => a.User)
+            .Include(a => a.Company)
+            .ToListAsync();
+
+        var result = advertisers.Select(a => new Advertiser
+        {
+            AdvertiserId = a.AdvertiserId,
+            User = new User { UserName = a.User.UserName },
+            Company = a.Company != null ? new Company { CompanyName = a.Company.CompanyName } : null
+        });
+
+        return result;
     }
+
     public async Task<Advertiser> GetAdvertiserByIdAsync(int id)
     {
         return await _ctx.Advertisers.Include(a => a.User).FirstOrDefaultAsync(a => a.AdvertiserId == id);

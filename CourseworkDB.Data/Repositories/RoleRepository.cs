@@ -46,9 +46,18 @@ public class RoleRepository : IRoleRepository
             return;
         }
 
+        var usersWithRole = await _ctx.Users.Where(u => u.Role.RoleId == id).ToListAsync();
+        foreach (var user in usersWithRole)
+        {
+            user.Role = null;
+        }
+
         _ctx.Roles.Remove(role);
+
         await _ctx.SaveChangesAsync();
+        return;
     }
+
     public async Task<User> AddUserToRoleAsync(int roleId, int userId)
     {
         var user = await _ctx.Users.FindAsync(userId);

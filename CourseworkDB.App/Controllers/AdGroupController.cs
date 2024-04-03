@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using CourseworkDB.Data.Dto;
 using CourseworkDB.Data.Models;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -22,7 +23,7 @@ public class AdGroupController : Controller
     public IActionResult Index()
     {
         List<AdGroup> adGroupList = new List<AdGroup>();
-        HttpResponseMessage response = _client.GetAsync($"{_client.BaseAddress}/AdGroup/GetAdGroups").Result;
+        HttpResponseMessage response = _client.GetAsync($"{_client.BaseAddress}/AdGroup/GetAdGroup").Result;
         if (response.IsSuccessStatusCode)
         {
             string data = response.Content.ReadAsStringAsync().Result;
@@ -38,7 +39,7 @@ public class AdGroupController : Controller
         if (response.IsSuccessStatusCode)
         {
             string data = response.Content.ReadAsStringAsync().Result;
-            AdGroup adGroup = JsonConvert.DeserializeObject<AdGroup>(data);
+            AdGroupsDto adGroup = JsonConvert.DeserializeObject<AdGroupsDto>(data);
             return View(adGroup);
         }
         else
@@ -48,7 +49,7 @@ public class AdGroupController : Controller
     }
 
     [HttpPost]
-    public IActionResult Edit(AdGroup adGroup)
+    public IActionResult Edit(AdGroupsDto adGroup)
     {
         HttpResponseMessage response = _client.PutAsJsonAsync($"{_client.BaseAddress}/AdGroup/UpdateAdGroup", adGroup).Result;
         if (response.IsSuccessStatusCode)
@@ -114,7 +115,7 @@ public class AdGroupController : Controller
     }
 
     [HttpPost]
-    public IActionResult Create(AdGroup adGroup)
+    public IActionResult Create(AdGroupsDto adGroup)
     {
         HttpResponseMessage response = _client.PostAsJsonAsync($"{_client.BaseAddress}/AdGroup/AddAdGroup", adGroup).Result;
         if (response.IsSuccessStatusCode)
@@ -124,6 +125,29 @@ public class AdGroupController : Controller
         else
         {
             return View(adGroup);
+        }
+    }
+    [HttpGet]
+    public IActionResult AddCampaign()
+    {
+        return View();
+    }
+    [HttpPost]
+    public IActionResult AddCampaign(int adCampaignId, int adGroupId)
+    {
+        string url = $"{_client.BaseAddress}/AdGroup/AddAdCampaignToAdGroup?adGroupId={adCampaignId}&adCampaignId={adGroupId}";
+
+        HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, url);
+
+        HttpResponseMessage response = _client.SendAsync(request).Result;
+
+        if (response.IsSuccessStatusCode)
+        {
+            return RedirectToAction("Index");
+        }
+        else
+        {
+            return NotFound();
         }
     }
 }

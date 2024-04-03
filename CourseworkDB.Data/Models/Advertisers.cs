@@ -10,4 +10,5 @@ public class Advertiser
     [Required]
     public int AdvertiserId { get; set; }
     public User User { get; set; }
+    public Company? Company { get; set; }
 }

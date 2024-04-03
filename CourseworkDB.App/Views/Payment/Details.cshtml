@@ -4,6 +4,57 @@
     ViewData["Title"] = "Details";
 }
 
+<style>
+    body::after {
+        content: "";
+        background: url('https://i.ibb.co/Qr5NKQ2/good-enough.png') center center/cover no-repeat;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: -1;
+        background-size: cover;
+        background-position: center calc(var(--scroll-position));
+        filter: blur(5px);
+    }
+
+    h1 {
+        color: #333;
+        margin-bottom: 20px;
+    }
+
+    .container {
+        max-width: 800px;
+        margin: 20px auto;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h4 {
+        color: #555;
+    }
+
+    .back-button {
+        display: inline-block;
+        margin-top: 20px;
+        color: #fff;
+        background-color: #007bff;
+        border: 1px solid #007bff;
+        padding: .375rem .75rem;
+        border-radius: .25rem;
+        text-decoration: none;
+    }
+
+        .back-button:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
+            text-decoration: none;
+        }
+</style>
+
 <h1>Details</h1>
 
 <div>
@@ -31,6 +82,6 @@
     </dl>
 </div>
 <div>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.PaymentId }) |
-    <a asp-action="Index">Back to List</a>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.PaymentId }, new { @class = "btn btn-primary" }) |
+    <a asp-action="Index" class="back-button">Back to List</a>
 </div>

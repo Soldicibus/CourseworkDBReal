@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Net.Http;
 using System.Net.Http.Json;
+using CourseworkDB.Data.Dto;
 using CourseworkDB.Data.Models;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -23,7 +25,7 @@ public class AdCampaignController : Controller
     public IActionResult Index()
     {
         List<AdCampaign> adCampaignList = new List<AdCampaign>();
-        HttpResponseMessage response = _client.GetAsync($"{_client.BaseAddress}/AdCampaign/GetAdCampaigns").Result;
+        HttpResponseMessage response = _client.GetAsync($"{_client.BaseAddress}/AdCampaigns/GetAdCampaigns").Result;
         if (response.IsSuccessStatusCode)
         {
             string data = response.Content.ReadAsStringAsync().Result;
@@ -35,11 +37,11 @@ public class AdCampaignController : Controller
     [HttpGet]
     public IActionResult Edit(int id)
     {
-        HttpResponseMessage response = _client.GetAsync($"{_client.BaseAddress}/AdCampaign/GetAdCampaignById/{id}").Result;
+        HttpResponseMessage response = _client.GetAsync($"{_client.BaseAddress}/AdCampaigns/GetAdCampaignById/{id}").Result;
         if (response.IsSuccessStatusCode)
         {
             string data = response.Content.ReadAsStringAsync().Result;
-            AdCampaign adCampaign = JsonConvert.DeserializeObject<AdCampaign>(data);
+            AdCampaignCreationDto adCampaign = JsonConvert.DeserializeObject<AdCampaignCreationDto>(data);
             return View(adCampaign);
         }
         else
@@ -49,9 +51,9 @@ public class AdCampaignController : Controller
     }
 
     [HttpPost]
-    public IActionResult Edit(AdCampaign adCampaign)
+    public IActionResult Edit(AdCampaignCreationDto adCampaign)
     {
-        HttpResponseMessage response = _client.PutAsJsonAsync($"{_client.BaseAddress}/AdCampaign/UpdateAdCampaign", adCampaign).Result;
+        HttpResponseMessage response = _client.PutAsJsonAsync($"{_client.BaseAddress}/AdCampaigns/UpdateAdCampaign", adCampaign).Result;
         if (response.IsSuccessStatusCode)
         {
             return RedirectToAction("Index");
@@ -65,7 +67,7 @@ public class AdCampaignController : Controller
     [HttpGet]
     public IActionResult Details(int id)
     {
-        HttpResponseMessage response = _client.GetAsync($"{_client.BaseAddress}/AdCampaign/GetAdCampaignById/{id}").Result;
+        HttpResponseMessage response = _client.GetAsync($"{_client.BaseAddress}/AdCampaigns/GetAdCampaignById/{id}").Result;
         if (response.IsSuccessStatusCode)
         {
             string data = response.Content.ReadAsStringAsync().Result;
@@ -81,7 +83,7 @@ public class AdCampaignController : Controller
     [HttpGet]
     public IActionResult Delete(int id)
     {
-        HttpResponseMessage response = _client.GetAsync($"{_client.BaseAddress}/AdCampaign/GetAdCampaignById/{id}").Result;
+        HttpResponseMessage response = _client.GetAsync($"{_client.BaseAddress}/AdCampaigns/GetAdCampaignById/{id}").Result;
         if (response.IsSuccessStatusCode)
         {
             string data = response.Content.ReadAsStringAsync().Result;
@@ -97,7 +99,7 @@ public class AdCampaignController : Controller
     [HttpPost]
     public IActionResult Delete(AdCampaign adCampaign)
     {
-        HttpResponseMessage response = _client.DeleteAsync($"{_client.BaseAddress}/AdCampaign/DeleteAdCampaign/{adCampaign.CampaignId}").Result;
+        HttpResponseMessage response = _client.DeleteAsync($"{_client.BaseAddress}/AdCampaigns/DeleteAdCampaign/{adCampaign.CampaignId}").Result;
         if (response.IsSuccessStatusCode)
         {
             return RedirectToAction("Index");
@@ -115,9 +117,9 @@ public class AdCampaignController : Controller
     }
 
     [HttpPost]
-    public IActionResult Create(AdCampaign adCampaign)
+    public IActionResult Create(AdCampaignCreationDto adCampaign)
     {
-        HttpResponseMessage response = _client.PostAsJsonAsync($"{_client.BaseAddress}/AdCampaign/AddAdCampaign", adCampaign).Result;
+        HttpResponseMessage response = _client.PostAsJsonAsync($"{_client.BaseAddress}/AdCampaigns/AddAdCampaign", adCampaign).Result;
         if (response.IsSuccessStatusCode)
         {
             return RedirectToAction("Index");
@@ -125,6 +127,29 @@ public class AdCampaignController : Controller
         else
         {
             return View(adCampaign);
+        }
+    }
+    [HttpGet]
+    public IActionResult AddAd()
+    {
+        return View();
+    }
+    [HttpPost]
+    public IActionResult AddAd(int adCampaign, int adId)
+    {
+        string url = $"{_client.BaseAddress}/AdCampaigns/AddAdToAdCampaign?adCampaignId={adCampaign}&adId={adId}";
+
+        HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, url);
+
+        HttpResponseMessage response = _client.SendAsync(request).Result;
+
+        if (response.IsSuccessStatusCode)
+        {
+            return RedirectToAction("Index");
+        }
+        else
+        {
+            return NotFound();
         }
     }
 }

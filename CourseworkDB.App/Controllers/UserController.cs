@@ -33,7 +33,7 @@ public class UserController : Controller
         if (response.IsSuccessStatusCode)
         {
             string data = response.Content.ReadAsStringAsync().Result;
-            User user = JsonConvert.DeserializeObject<User>(data);
+            UserDto_w_pass user = JsonConvert.DeserializeObject<UserDto_w_pass>(data);
             return View(user);
         }
         else

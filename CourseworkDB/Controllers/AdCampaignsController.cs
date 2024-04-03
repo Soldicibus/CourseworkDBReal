@@ -379,42 +379,7 @@ public class AdCampaignsController : Controller
             });
         }
     }
-    /*[HttpPut]
-    public async Task<IActionResult> AddAdGroupToAdCampaign(int adCampaignId, int adGroupId)
-    {
-        try
-        {
-            if (!_adCampaignrepos.AdCampaignExists(adCampaignId))
-            {
-                return NotFound(new
-                {
-                    statusCode = 404,
-                    message = "Record doesn't exist"
-                });
-            }
-            var adCampaign = await _adCampaignrepos.GetAdCampaignAsync(adCampaignId);
-            if (adCampaign == null)
-            {
-                return NotFound(new
-                {
-                    statusCode = 404,
-                    message = "Record not found"
-                });
-            }
-            var addedAdGroup = await _adCampaignrepos.AddAdGroupToAdCampaignAsync(adCampaignId, adGroupId);
-            return CreatedAtAction(nameof(AddAdCampaign), addedAdGroup);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex.Message);
-            return StatusCode(StatusCodes.Status500InternalServerError, new
-            {
-                statusCode = 500,
-                message = ex.Message
-            });
-        }
-    }*/
-    [HttpPut]
+    [HttpPost]
     public async Task<IActionResult> AddAdToAdCampaign(int adCampaignId, int adId)
     {
         try
@@ -437,7 +402,8 @@ public class AdCampaignsController : Controller
                 });
             }
             var addedAd = await _adCampaignrepos.AddAdToAdCampaignAsync(adCampaignId, adId);
-            return CreatedAtAction(nameof(AddAdCampaign), addedAd);
+            var outp = _mapper.Map<AdDto>(addedAd);
+            return CreatedAtAction(nameof(AddAdCampaign), outp);
         }
         catch (Exception ex)
         {

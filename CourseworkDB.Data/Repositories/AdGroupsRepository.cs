@@ -56,6 +56,12 @@ public class AdGroupsRepository : IAdGroupsRepository
             return;
         }
 
+        var campaignsWithGroups = await _ctx.AdCampaigns.Where(a => a.AdGroup.GroupId == adGroupId).ToListAsync();
+        foreach (var campaign in campaignsWithGroups)
+        {
+            campaign.AdGroup = null;
+        }
+
         _ctx.AdGroups.Remove(adGroup);
         await _ctx.SaveChangesAsync();
         return;

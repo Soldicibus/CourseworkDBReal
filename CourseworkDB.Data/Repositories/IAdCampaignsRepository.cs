@@ -1,4 +1,5 @@
 ﻿using CourseworkDB.Data.Models;
+using System.Collections.Generic;
 
 namespace CourseworkDB.Data.Repositories
 {
@@ -17,6 +18,6 @@ namespace CourseworkDB.Data.Repositories
         Task<ICollection<AdCampaign>> GetAdCampaignsInDecreasingOrderAsync();
         //Task<AdGroup> AddAdGroupToAdCampaignAsync(int adCampaignId, int adGroupId);
         Task<Ad> AddAdToAdCampaignAsync(int adCampaignId, int adId);
-        Task<ICollection<AdCampaign>> GetAdCampaignsAsync();
+        Task<IEnumerable<AdCampaign>> GetAdCampaignsAsync();
     }
 }
